@@ -4,17 +4,3 @@ body {
   margin:0;
    font-family: 'Roboto', sans-serif; 
 }
-
-// Source mixin
-@mixin make-container($padding-x: $container-padding-x) {
-  width: 100%;
-  padding-right: $padding-x;
-  padding-left: $padding-x;
-  margin-right: auto;
-  margin-left: auto;
-}
-
-// Usage
-.custom-container {
-  @include make-container();
-}
