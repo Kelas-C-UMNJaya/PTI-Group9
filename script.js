@@ -23,24 +23,37 @@ const Player = (inName) => {
   let main = new Status(500, 6, 1);
   let tidur = new Status(500, 2, 1);
 
-  const getStatus = { name, belajar, makan, main, tidur };
+  const getStatus = { belajar, makan, main, tidur };
   const update = () => {
     belajar.updateAmount();
     makan.updateAmount();
-    makan.updateAmount();
     main.updateAmount();
-    console.log([belajar.amount, makan.amount, main.amount, tidur.amount]);
+    tidur.updateAmount();
   }
   return {
     getStatus,
     update,
   }
-
 };
 
-const DOM = () => {
+const DOM = (() => {
+  const updateProgress = (status, val) => {
+    const el = document.querySelector(`#${status}-progressBar`);
+    el.style.width = `${val}%`;
+  }
+  return {
+    updateProgress,
+  }
+})();
 
-};
+const gameController = (() => {
+  let player = Player("Rivo");
+  setInterval(() => {
+    player.update()
+    Object.keys(player.getStatus).forEach(val => {
+      console.log(`${val}, ${player.getStatus[val].amount}`)
+      DOM.updateProgress(val, Math.round(player.getStatus[val].amount / 10));
+    })
+  }, 1000);
+});
 
-let rivo = Player("Rivo");
-rivo.update();
