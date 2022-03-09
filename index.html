@@ -7,47 +7,77 @@
     <link href="style.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script defer src="script.js"></script>
+    <script src="https://kit.fontawesome.com/9d53a2f771.js" crossorigin="anonymous"></script>
   </head>
-  <body>
-    <div class="container p-4 w-50 m-auto flex flex-column justify-content-center align-items-center" id="container">
-      <div id="dashboard" class="mb-3">
-        <div class="row gy-3">
-          <div class="col-sm-6">
-            <div class="progress">
-              <div id="makan-ProgressBar" class="progress-bar" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
+  <body class="vh-100">
+    <div class="container-sm d-flex p-4 h-100 flex-column justify-content-center align-items-center" id="container">
+      <div id="dashboard" class="mb-3 w-50 mx-auto">
+        <div class=" p-3 mb-2 bg-primary text-white rounded-3">
+          <div class="row-3 d-flex col-sm-10 mb-3">
+            <a>Halo, Rivo</a>
+            <h6 id="nama" class="mx-auto"></h6>
+            <a>Semester 2</a>
+            <h6 id="semester" class="mx-5"></h6>
+            <a>09:30</a>
+            <h6 id="jam" class=""></h6>
           </div>
-          <div class="col-sm-6">
-            <div class="progress">
-              <div id="main-progressBar" class="progress-bar" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+
+          <div id="statusBar" class="row">
+            <div class="col-sm-6 d-flex gap-2 align-items-center justify-content-between">
+              <span><i class="fa-solid fa-utensils"></i></span>
+              <div class="col">
+                <div class="progress border border-white">
+                  <div id="makan-progressBar" class="progress-bar" role="progressbar" style="width: 0" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+              </div>
             </div>
-          </div>
-          <div class="col-sm-6">
-            <div class="progress">
-              <div id="belajar-progressBar" class="progress-bar" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+
+            <div class="col-sm-6 d-flex gap-2 align-items-center justify-content-between">
+              <span><i class="fa-solid fa-gamepad"></i></span>
+              <div class="col">
+                <div class="progress border border-white">
+                  <div id="main-progressBar" class="progress-bar" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+              </div>
             </div>
-          </div>
-          <div class="col-sm-6">
-            <div class="progress">
-              <div id="tidur-progress-bar" class="progress-bar" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+
+            <div class="col-sm-6 d-flex gap-2 align-items-center justify-content-between">
+              <span><i class="fa-solid fa-brain"></i></span>
+              <div class="col">
+                <div class="progress border border-white">
+                  <div id="belajar-progressBar" class="progress-bar" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-sm-6 d-flex gap-2 align-items-center justify-content-between">
+              <span><i class="fa-solid fa-bed"></i></span>
+              <div class="col">
+                <div class="progress border border-white">
+                  <div id="tidur-progressBar" class="progress-bar" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div id="game-control" class="">
-        <div class="row g-2">
-          <div class="col-6">
-              <button type="button" class="btn btn-primary" data-bs-toggle="button" autocomplete="off">Makan</button>
+      <div id="game-control" class="gap-2 d-flex flex-column justify-content-center align-items-center">
+        <div class="row gy-2">
+          <div class="col-sm-6 d-grid mx-auto">
+              <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="button" autocomplete="off">Makan</button>
           </div>
-          <div class="col-6">
-              <button type="button" class="btn btn-primary" data-bs-toggle="button" autocomplete="off">Main</button>
+          
+          <div class="col-sm-6 d-grid mx-auto">
+              <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="button" autocomplete="off">Main</button>
           </div>
-          <div class="col-6">
-              <button type="button" class="btn btn-primary" data-bs-toggle="button" autocomplete="off">Belajar</button>
+
+          <div class="col-sm-6 d-grid mx-auto">
+              <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="button" autocomplete="off">Belajar</button>
           </div>
-          <div class="col-6">
-              <button type="button" class="btn btn-primary" data-bs-toggle="button" autocomplete="off">Tidur</button>
+
+          <div class="col-sm-6 d-grid mx-auto">
+              <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="button" autocomplete="off">Tidur</button>
           </div>
         </div>
       </div>
