@@ -1,3 +1,20 @@
+const DOM = (() => {
+  const updateProgress = (status, val) => {
+    const el = document.querySelector(`#${status}-progressBar`);
+    el.style.width = `${val}%`;
+  }
+  const updateClock = ([hours, minutes]) => {
+    hours = hours >= 10 ? hours : "0" + hours;
+    minutes = minutes >= 10 ? minutes : "0" + minutes;
+    const clock = document.querySelector("#jam");
+    clock.innerText = `${hours}:${minutes}`;
+  }
+  return {
+    updateProgress,
+    updateClock,
+  }
+})();
+
 class Status {
   constructor(inAmount, inGrowth, inShrink) {
     this.amount = inAmount;
@@ -6,11 +23,15 @@ class Status {
   }
 
   // get = { this.amount, growth, shrink };
-  updateAmount = () => {
-    if(!(this.amount >= 1000)) {
-      this.amount += this.growth;
-      this.amount += this.shrink;
+  shrinkStats = () => {
+    if(!(this.amount <= 0)) {
+      this.amount -= this.shrink;
     }
+  }
+
+  growStats = () => {
+    this.amount += this.growth;
+    if (this.amount === 1000) this.amount = 1000;
   }
   changeGrowth = (val) => { this.growth = val; }
   changeShrink = (val) => { this.shrink = val; }
@@ -25,10 +46,10 @@ const Player = (inName) => {
 
   const getStatus = { belajar, makan, main, tidur };
   const update = () => {
-    belajar.updateAmount();
-    makan.updateAmount();
-    main.updateAmount();
-    tidur.updateAmount();
+    belajar.shrinkStats();
+    makan.shrinkStats();
+    main.shrinkStats();
+    tidur.shrinkStats();
   }
   return {
     getStatus,
@@ -36,24 +57,32 @@ const Player = (inName) => {
   }
 };
 
-const DOM = (() => {
-  const updateProgress = (status, val) => {
-    const el = document.querySelector(`#${status}-progressBar`);
-    el.style.width = `${val}%`;
-  }
-  return {
-    updateProgress,
-  }
-})();
+
 
 const gameController = (() => {
+  let clock = new Date();
   let player = Player("Rivo");
+
+  const initClock = () => {
+    clock.setHours(9);
+    clock.setMinutes(55);
+    clock.setSeconds(0);
+  };
+  
+  const incClock = () => clock.setMinutes((clock.getMinutes()) + 1)
+
+  initClock();
   setInterval(() => {
     player.update()
+    incClock();
+
+    DOM.updateClock([clock.getHours(), clock.getMinutes()]);
+
     Object.keys(player.getStatus).forEach(val => {
-      console.log(`${val}, ${player.getStatus[val].amount}`)
-      DOM.updateProgress(val, Math.round(player.getStatus[val].amount / 10));
+      DOM.updateProgress(
+        val, Math.round(player.getStatus[val].amount / 10)
+      );
     })
   }, 1000);
-});
+})();
 
