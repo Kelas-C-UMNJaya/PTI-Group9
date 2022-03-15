@@ -9,21 +9,21 @@ const DOM = (() => {
     const clock = document.querySelector("#jam");
     clock.innerText = `${hours}:${minutes}`;
   }
-  const updateButton = () => {
+  const updateButton = (() => {
     let buttons = document.querySelectorAll(".togglebutton");
     buttons.forEach(button => {
-      button.addEventListener("click", () => {
+      button.addEventListener("click", (e) => {
         button.classList.remove("btn-primary");
         button.classList.add("btn-warning");
         buttons.forEach(button => {
-          if (button != event.target) {
+          if (button != e.target) {
             button.classList.remove("btn-warning");
             button.classList.add("btn-primary");
           }
         });
       });
     })
-  }
+  })();
   return {
     updateProgress,
     updateClock,
@@ -40,7 +40,7 @@ class Status {
 
   // get = { this.amount, growth, shrink };
   shrinkStats = () => {
-    if(!(this.amount <= 0)) {
+    if (!(this.amount <= 0)) {
       this.amount -= this.shrink;
     }
   }
@@ -82,10 +82,14 @@ const gameController = (() => {
     clock.setMinutes(55);
     clock.setSeconds(0);
   };
-  
+
   const incClock = () => clock.setMinutes((clock.getMinutes()) + 1)
 
-  initClock();
+
+  const init = (() => {
+    initClock();
+  })();
+
   setInterval(() => {
     player.update()
     incClock();
