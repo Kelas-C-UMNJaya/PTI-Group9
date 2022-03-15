@@ -1,14 +1,67 @@
+class Status {
+  isActive = false;
+  constructor(name, amount, growth, shrink) {
+    this.name = name;
+    this.amount = amount;
+    this.growth = growth;
+    this.shrink = shrink;
+    this.default = { growth: growth, shrink: shrink };
+  }
+
+  update = () => {
+    this.isActive ? this.amount += this.growth : this.amount -= this.shrink;
+    this.amount = this.amount > 1000 ? 1000
+      : this.amount = this.amount <= 0 ? 0
+        : this.amount;
+  }
+
+  active = () => this.isActive = true;
+  inactive = () => this.isActive = false;
+
+  changeGrowth = (val) => { this.growth = val; }
+  changeShrink = (val) => { this.shrink = val; }
+
+  reset = () => {
+    [this.growth, this.shrink] = [this.default.growth, this.default.shrink];
+  }
+};
+
+const Player = (inName) => {
+  let name = inName;
+  // TODO
+  // Bikin variabel untuk nyimpan url avatarnya
+  let belajar = new Status("belajar", 0, 4, 0);
+  let makan = new Status("makan", 500, 100, 4);
+  let main = new Status("main", 500, 6, 1);
+  let tidur = new Status("tidur", 500, 2, 1);
+
+  const status = { belajar, makan, main, tidur };
+  const update = () => {
+    belajar.update();
+    makan.update();
+    main.update();
+    tidur.update();
+  }
+
+  return {
+    status,
+    update,
+  }
+};
+
 const DOM = (() => {
   const updateProgress = (status, val) => {
     const el = document.querySelector(`#${status}-progressBar`);
     el.style.width = `${val}%`;
   }
+
   const updateClock = ([hours, minutes]) => {
     hours = hours >= 10 ? hours : "0" + hours;
     minutes = minutes >= 10 ? minutes : "0" + minutes;
     const clock = document.querySelector("#jam");
     clock.innerText = `${hours}:${minutes}`;
   }
+
   const updateButton = (() => {
     let buttons = document.querySelectorAll(".togglebutton");
     buttons.forEach(button => {
@@ -37,54 +90,6 @@ const DOM = (() => {
   }
 })();
 
-class Status {
-  isActive = false;
-  constructor(name, inAmount, inGrowth, inShrink) {
-    this.name = name
-    this.amount = inAmount;
-    this.growth = inGrowth;
-    this.shrink = inShrink;
-  }
-
-  // get = { this.amount, growth, shrink };
-  update = () => {
-    this.isActive ? this.amount += this.growth : this.amount -= this.shrink;
-    this.amount = this.amount > 1000 ? 1000
-      : this.amount = this.amount <= 0 ? 0
-        : this.amount;
-  }
-
-
-  active = () => this.isActive = true;
-  inactive = () => this.isActive = false;
-
-  changeGrowth = (val) => { this.growth = val; }
-  changeShrink = (val) => { this.shrink = val; }
-};
-
-const Player = (inName) => {
-  let name = inName;
-  // TODO
-  // Bikin variabel untuk nyimpan url avatarnya
-  let belajar = new Status("belajar", 0, 4, 0);
-  let makan = new Status("makan", 500, 100, 40);
-  let main = new Status("main", 500, 6, 1);
-  let tidur = new Status("tidur", 500, 2, 1);
-
-  const status = { belajar, makan, main, tidur };
-  const update = () => {
-    belajar.update();
-    makan.update();
-    main.update();
-    tidur.update();
-  }
-
-  return {
-    status,
-    update,
-  }
-};
-
 const gameController = (() => {
   let clock = new Date();
   let player = Player("Rivo");
@@ -108,9 +113,60 @@ const gameController = (() => {
     })
   }
 
+  const Algorithm = (() => {
+    return {
+      belajar: () => {
+        if (player.status["belajar"].isActive) {
+          player.status["makan"].changeShrink(6);
+          player.status["main"].changeShrink(3);
+        } else {
+          player.status["makan"].reset();
+          player.status["main"].reset();
+        }
+      },
+      tidur: () => {
+        if (player.status["tidur"].amount < 200) {
+          player.status["belajar"].changeGrowth(1);
+          player.status["main"].changeShrink(3);
+        } else {
+          player.status["belajar"].reset();
+          player.status["main"].reset();
+        }
+      },
+      makan: () => {
+        if (player.status["makan"].amount < 200) {
+          player.status["belajar"].changeGrowth(1);
+          player.status["main"].changeShrink(3);
+        } else {
+          player.status["belajar"].reset();
+          player.status["main"].reset();
+        }
+
+        if (player.status["makan"].amount === 1000) {
+          player.status["main"].amount += 20;
+        }
+      },
+      main: () => {
+        if (player.status["main"].amount < 200) {
+          player.status["belajar"].changeGrowth(2);
+        }
+        else if (player.status["main"].amount < 100) {
+          player.status["belajar"].changeGrowth(1);
+        } else {
+          player.status["belajar"].reset();
+        }
+      }
+    }
+  })();
+
   const gameClock = setInterval(() => {
     player.update()
     incClock();
+
+    Algorithm.belajar();
+    Algorithm.tidur();
+    Algorithm.makan();
+    Algorithm.main();
 
     DOM.updateClock([clock.getHours(), clock.getMinutes()]);
 
@@ -128,6 +184,6 @@ const gameController = (() => {
   return {
     init,
     toggleActive,
+    player,
   }
 })();
-
