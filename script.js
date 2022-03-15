@@ -47,16 +47,13 @@ class Status {
   }
 
   // get = { this.amount, growth, shrink };
-  shrinkStats = () => {
-    if (!(this.amount <= 0)) {
-      this.amount -= this.shrink;
-    }
+  update = () => {
+    this.isActive ? this.amount += this.growth : this.amount -= this.shrink;
+    this.amount = this.amount > 1000 ? 1000
+      : this.amount = this.amount <= 0 ? 0
+        : this.amount;
   }
 
-  growStats = () => {
-    this.amount += this.growth;
-    if (this.amount === 1000) this.amount = 1000;
-  }
 
   active = () => this.isActive = true;
   inactive = () => this.isActive = false;
@@ -68,18 +65,18 @@ class Status {
 const Player = (inName) => {
   let name = inName;
   // TODO
-  // let avatar = null;
+  // Bikin variabel untuk nyimpan url avatarnya
   let belajar = new Status("belajar", 0, 4, 0);
-  let makan = new Status("makan", 500, 100, 4);
+  let makan = new Status("makan", 500, 100, 40);
   let main = new Status("main", 500, 6, 1);
   let tidur = new Status("tidur", 500, 2, 1);
 
   const status = { belajar, makan, main, tidur };
   const update = () => {
-    belajar.shrinkStats();
-    makan.shrinkStats();
-    main.shrinkStats();
-    tidur.shrinkStats();
+    belajar.update();
+    makan.update();
+    main.update();
+    tidur.update();
   }
 
   return {
@@ -101,7 +98,9 @@ const gameController = (() => {
   const incClock = () => clock.setMinutes((clock.getMinutes()) + 1)
 
   const toggleActive = (status) => {
-    player.status[status].active();
+    player.status[status].isActive ?
+      player.status[status].inactive() :
+      player.status[status].active();
     Object.keys(player.status).forEach((obj) => {
       if (obj != status) {
         player.status[obj].inactive()
