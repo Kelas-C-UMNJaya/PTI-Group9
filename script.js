@@ -9,9 +9,25 @@ const DOM = (() => {
     const clock = document.querySelector("#jam");
     clock.innerText = `${hours}:${minutes}`;
   }
+  const updateButton = () => {
+    let buttons = document.querySelectorAll(".togglebutton");
+    buttons.forEach(button => {
+      button.addEventListener("click", () => {
+        button.classList.remove("btn-primary");
+        button.classList.add("btn-warning");
+        buttons.forEach(button => {
+          if (button != event.target) {
+            button.classList.remove("btn-warning");
+            button.classList.add("btn-primary");
+          }
+        });
+      });
+    })
+  }
   return {
     updateProgress,
     updateClock,
+    updateButton,
   }
 })();
 
@@ -56,8 +72,6 @@ const Player = (inName) => {
     update,
   }
 };
-
-
 
 const gameController = (() => {
   let clock = new Date();

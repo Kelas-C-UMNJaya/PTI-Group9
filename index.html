@@ -60,19 +60,18 @@
       <div id="game-control" class="gap-2 d-flex flex-column justify-content-center align-items-center">
         <div class="row gy-2" id="button-list">
           <div class="col-sm-6 d-grid mx-auto">
-              <button id="makan-button" type="button" class="btn btn-primary btn-sm rounded-pill" data-bs-toggle="button" autocomplete="off">Makan</button>
+              <button id="makan-button" type="button" class="togglebutton btn btn-primary btn-sm rounded-pill" data-bs-toggle="button" autocomplete="off" onclick="DOM.updateButton()" >Makan</button>
           </div>
-          
           <div class="col-sm-6 d-grid mx-auto">
-              <button id="main-button" type="button" class="btn btn-primary btn-sm rounded-pill" data-bs-toggle="button" autocomplete="off">Main</button>
-          </div>
-
-          <div class="col-sm-6 d-grid mx-auto">
-              <button id="belajar-button" type="button" class="btn btn-primary btn-sm rounded-pill" data-bs-toggle="button" autocomplete="off">Belajar</button>
+              <button id="main-button" type="button" class="togglebutton btn btn-primary btn-sm rounded-pill" data-bs-toggle="button" autocomplete="off"  onclick="DOM.updateButton()" >Main</button>
           </div>
 
           <div class="col-sm-6 d-grid mx-auto">
-              <button id="tidur-button" type="button" class="btn btn-primary btn-sm rounded-pill" data-bs-toggle="button" autocomplete="off">Tidur</button>
+              <button id="belajar-button" type="button" class="togglebutton btn btn-primary btn-sm rounded-pill" data-bs-toggle="button" autocomplete="off"  onclick="DOM.updateButton()">Belajar</button>
+          </div>
+
+          <div class="col-sm-6 d-grid mx-auto">
+              <button id="tidur-button" type="button" class="togglebutton btn btn-primary btn-sm rounded-pill" data-bs-toggle="button" autocomplete="off"  onclick="DOM.updateButton()">Tidur</button>
           </div>
         </div>
       </div>
