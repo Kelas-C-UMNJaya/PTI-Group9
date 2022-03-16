@@ -1,6 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap');
+@media (min-width: 1200px) {
+  .container, .container-lg, .container-md, .container-sm, .container-xl {
+    max-width: 700px;
+  }
+}
 
-body {
-  margin:0;
-  font-family: 'Roboto', sans-serif; 
+#jam {
+  width: 3rem;
+  text-align: right;
 }

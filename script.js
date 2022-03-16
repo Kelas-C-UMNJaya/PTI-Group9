@@ -44,6 +44,7 @@ const Player = (inName) => {
   }
 
   return {
+    name,
     status,
     update,
   }
@@ -83,7 +84,14 @@ const DOM = (() => {
       });
     })
   })();
+
+  const changeName = (name) => {;
+    const el = document.querySelector("#nama-player");
+    el.innerText = name;
+  }
+
   return {
+    changeName,
     updateProgress,
     updateClock,
     updateButton,
@@ -114,6 +122,7 @@ const gameController = (() => {
   }
 
   const Algorithm = (() => {
+    let makanBoost = true;
     return {
       belajar: () => {
         if (player.status["belajar"].isActive) {
@@ -128,6 +137,9 @@ const gameController = (() => {
         if (player.status["tidur"].amount < 200) {
           player.status["belajar"].changeGrowth(1);
           player.status["main"].changeShrink(3);
+
+          // TODO
+          // Kasih prompt ketika udah kurang dari 100
         } else {
           player.status["belajar"].reset();
           player.status["main"].reset();
@@ -137,13 +149,20 @@ const gameController = (() => {
         if (player.status["makan"].amount < 200) {
           player.status["belajar"].changeGrowth(1);
           player.status["main"].changeShrink(3);
+
+          // TODO
+          // Kasih prompt ketika udah kurang dari 100
         } else {
           player.status["belajar"].reset();
           player.status["main"].reset();
         }
 
-        if (player.status["makan"].amount === 1000) {
+        if (player.status["makan"].amount === 1000 && makanBoost) {
           player.status["main"].amount += 20;
+          makanBoost = false;
+        }
+        if(player.status["makan"].amount === 800) {
+          makanBoost = true;
         }
       },
       main: () => {
@@ -152,6 +171,8 @@ const gameController = (() => {
         }
         else if (player.status["main"].amount < 100) {
           player.status["belajar"].changeGrowth(1);
+          // TODO
+          // Kasih prompt ketika udah kurang dari 100
         } else {
           player.status["belajar"].reset();
         }
@@ -178,6 +199,7 @@ const gameController = (() => {
   }, 1000);
 
   const init = (() => {
+    DOM.changeName(player.name);
     initClock();
   })();
 
