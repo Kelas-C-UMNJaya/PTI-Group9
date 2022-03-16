@@ -68,22 +68,33 @@ const DOM = (() => {
     buttons.forEach(button => {
       button.addEventListener("click", (e) => {
         gameController.toggleActive(e.target.dataset.name);
-        button.classList.remove("btn-primary");
+        button.classList.remove("btn-light");
         button.classList.add("btn-warning");
         buttons.forEach(button => {
           if (button != e.target) {
             button.classList.remove("btn-warning");
             button.classList.remove("active");
-            button.classList.add("btn-primary");
+            button.classList.add("btn-light");
           }
         });
         if (!(button.classList.contains("active"))) {
           button.classList.remove("btn-warning");
-          button.classList.add("btn-primary");
+          button.classList.add("btn-light");
         }
       });
     })
   })();
+
+  const changeBg = (hours) => {
+    const bg = document.querySelector("#bg-image");
+    if (hours >= 6 && hours <= 16) {
+      bg.style.backgroundImage = "url('./assets/day.png')";
+    } else if (hours >= 16 && hours <= 20) {
+      bg.style.backgroundImage = "url('./assets/evening.png')";
+    } else {
+      bg.style.backgroundImage = "url('./assets/night.png')";
+    }
+  }
 
   const changeName = (name) => {;
     const el = document.querySelector("#nama-player");
@@ -92,6 +103,7 @@ const DOM = (() => {
 
   return {
     changeName,
+    changeBg,
     updateProgress,
     updateClock,
     updateButton,
@@ -108,7 +120,16 @@ const gameController = (() => {
     clock.setSeconds(0);
   };
 
-  const incClock = () => clock.setMinutes((clock.getMinutes()) + 1)
+  const changeClock = (hours, minutes) => {
+    clock.setHours(hours);
+    clock.setMinutes(minutes);
+    DOM.changeBg(hours);
+  };
+  const updateClock = () => {
+    const [hours, minutes] = [clock.getHours(), clock.getMinutes()];
+    DOM.updateClock([hours, minutes]);
+    changeClock(hours, minutes + 1);
+  }
 
   const toggleActive = (status) => {
     player.status[status].isActive ?
@@ -181,8 +202,8 @@ const gameController = (() => {
   })();
 
   const gameClock = setInterval(() => {
-    player.update()
-    incClock();
+    player.update();
+    updateClock();
 
     Algorithm.belajar();
     Algorithm.tidur();
@@ -205,7 +226,33 @@ const gameController = (() => {
 
   return {
     init,
+    changeClock,
     toggleActive,
     player,
+  }
+})();
+
+const Debug = (() => {
+  const timetravel = (jam) => {
+    switch(jam) {
+      case "pagi":
+        gameController.changeClock(9, 55);
+        break;
+      case "siang":
+        gameController.changeClock(12, 55);
+        break;
+      case "sore":
+        gameController.changeClock(16, 55);
+        break;
+      case "malam":
+        gameController.changeClock(23, 55);
+        break;
+      default:
+        console.log("Menunya tidak ada");
+        break;
+    }
+  }
+  return {
+    timetravel,
   }
 })();
