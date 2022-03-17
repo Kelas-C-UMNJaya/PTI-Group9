@@ -46,6 +46,7 @@ body {
 #jam {
   text-align: right;
 }
+<<<<<<< HEAD
 
 .fadeBase {
   opacity: 1;
@@ -56,3 +57,5 @@ body {
   opacity: 0;
   transition: opacity 1s ease-in-out;
 }
+=======
+>>>>>>> main
