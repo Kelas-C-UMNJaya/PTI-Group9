@@ -60,6 +60,17 @@ const DOM = (() => {
     const el = document.querySelector(`#${status}-progressBar`);
     el.style.width = `${val}%`;
     el.innerText = `${val}%`;
+    if (val >= 20 && val <= 30) {
+      el.classList.add("bg-warning");
+      el.classList.remove("bg-danger");
+    }
+    else if (val < 20) {
+      el.classList.add("bg-danger");
+      el.classList.remove("bg-warning");
+    } else {
+      el.classList.remove("bg-danger");
+      el.classList.remove("bg-warning");
+    }
   }
   const updateSemester = (val) => {
     const el = document.querySelector("#semester-now");
@@ -99,17 +110,17 @@ const DOM = (() => {
   // BIKIN JADI SATU AJA ALERTNYA
   // GA BANYAK
 
-  const addAlert = (status, message) => {
+  const addAlert = (message) => {
     const el = document.querySelector("#game-alert");
     const alert = document.createElement("div");
-    alert.className = "alert alert-danger alert-dismissible fade show in";
+    alert.className = "alert alert-danger fade show in";
     alert.innerText = message;
-    alert.id = `alert-${status}`;
+    alert.id = "alert-msg"
     el.appendChild(alert);
   }
-  const removeAlert = (status) => {
+  const removeAlert = () => {
     const el = document.querySelector(`#game-alert`);
-    const alert = document.querySelector(`#alert-${status}`);
+    const alert = document.querySelector(`#alert-msg`);
     el.removeChild(alert);
   }
 
@@ -180,20 +191,16 @@ const gameController = (() => {
 
   const Algorithm = (() => {
     let makanBoost = true;
-    let alert = {
-      makan: false,
-      main: false,
-      tidur: false,
-    }
+    let alert = false;
 
     const toggleAlert = (status) => {
       let val = player.status[status].amount;
-      if( val < 100 && alert[status] === false) {
-        alert[status] = true;
-        DOM.addAlert(status, `${status} is running out!`);
-      } else if ( val >= 100 && alert[status] === true) {
-        alert[status] = false;
-        DOM.removeAlert(status);
+      if( val < 100 && alert === false) {
+        alert = true;
+        DOM.addAlert(`Kondisi anda memburuk!`);
+      } else if ( val >= 100 && alert === true) {
+        alert = false;
+        DOM.removeAlert();
       }
     }
     return {
@@ -321,9 +328,9 @@ const Debug = (() => {
       gameController.player.status["belajar"].amount = 950;
     },
     turuninSemua: () => {
-      gameController.player.status["tidur"].amount = 150;
-      gameController.player.status["makan"].amount = 150;
-      gameController.player.status["main"].amount = 150;
+      gameController.player.status["tidur"].amount = 350;
+      gameController.player.status["makan"].amount = 350;
+      gameController.player.status["main"].amount = 350;
     },
     naikinSemua: () => {
       gameController.player.status["tidur"].amount = 900;
