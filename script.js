@@ -132,6 +132,9 @@ const DOM = (() => {
 
     fadeOut: (el) => {
       el.classList.add("fadeOut");
+      setTimeout(() => {
+        el.style.visibility = "hidden";
+      }, 1000);
     },
     fadeIn: (el) => {
       el.classList.remove("fadeOut");
@@ -255,8 +258,6 @@ const gameController = (() => {
         }
         else if (player.status["main"].amount < 100) {
           player.status["belajar"].changeGrowth(10); 
-          // TODO
-          // Kasih prompt ketika udah kurang dari 100
         } else {
           player.status["belajar"].reset();
         }
@@ -264,32 +265,56 @@ const gameController = (() => {
     }
   })();
 
-  const gameClock = setInterval(() => {
-    player.update();
-    updateClock();
+  const gameClock = (() => {
+    let interval;
+    const callback = () => {
+      player.update();
+      updateClock();
 
-    Algorithm.semesterUp();
-    Algorithm.belajar();
-    Algorithm.tidur();
-    Algorithm.makan();
-    Algorithm.main();
+      Algorithm.semesterUp();
+      Algorithm.belajar();
+      Algorithm.tidur();
+      Algorithm.makan();
+      Algorithm.main();
 
-    Object.keys(player.status).forEach(val => {
-      DOM.updateProgress(
-        val, Math.round(player.status[val].amount / 10)
-      );
-    })
-  }, 1000);
+      Object.keys(player.status).forEach(val => {
+        DOM.updateProgress(
+          val, Math.round(player.status[val].amount / 10)
+        );
+        if (val != "belajar" && player.status[val].amount <= 0) {
+          gameOver();
+        }
+      });
+    };
+
+    const start = () => {
+      interval = setInterval(callback, 1000);
+    }
+    const stop = () => {
+      clearInterval(interval);
+    };
+    return { start, stop }
+  })();
+
+  // TODO
+  // Bikin message custom per status
+  const gameOver = () => {
+    gameClock.stop();
+    DOM.fadeOut(document.querySelector("#main-game"));
+    DOM.fadeIn(document.querySelector("#game-over"));
+  }
 
   const init = (() => {
     DOM.changeName(player.name);
     DOM.updateSemester(player.semester);
     initClock();
+    gameClock.start();
   })();
 
   return {
     init,
     changeClock,
+    gameOver,
     toggleActive,
     player,
   }
@@ -320,20 +345,19 @@ const Debug = (() => {
       gameController.player.status["belajar"].amount = 950;
     },
     turuninSemua: () => {
-      gameController.player.status["tidur"].amount = 350;
-      gameController.player.status["makan"].amount = 350;
-      gameController.player.status["main"].amount = 350;
+      gameController.player.status["tidur"].amount = 100;
+      gameController.player.status["makan"].amount = 100;
+      gameController.player.status["main"].amount = 100;
     },
     naikinSemua: () => {
       gameController.player.status["tidur"].amount = 900;
       gameController.player.status["makan"].amount = 900;
       gameController.player.status["main"].amount = 900;
     },
-    fadeInGame: () => {
-      DOM.fadeIn(document.querySelector("#main-game"));
-    },
-    fadeOutGame: () => {
+    gameOver: () => {
       DOM.fadeOut(document.querySelector("#main-game"));
-    }
+      DOM.fadeIn(document.querySelector("#game-over"));
+      
+    },
   }
 })();
