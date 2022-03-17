@@ -34,6 +34,8 @@ const Player = (inName) => {
   let makan = new Status("makan", 500, 100, 4);
   let main = new Status("main", 500, 6, 1);
   let tidur = new Status("tidur", 500, 2, 1);
+  
+  let semester = 1;
 
   const status = { belajar, makan, main, tidur };
   const update = () => {
@@ -45,6 +47,7 @@ const Player = (inName) => {
 
   return {
     name,
+    semester,
     status,
     update,
   }
@@ -54,6 +57,11 @@ const DOM = (() => {
   const updateProgress = (status, val) => {
     const el = document.querySelector(`#${status}-progressBar`);
     el.style.width = `${val}%`;
+    el.innerText = `${val}%`;
+  }
+  const updateSemester = (val) => {
+    const el = document.querySelector("#semester-now");
+    el.innerText = val;
   }
 
   const updateClock = ([hours, minutes]) => {
@@ -102,6 +110,7 @@ const DOM = (() => {
   }
 
   return {
+    updateSemester,
     changeName,
     changeBg,
     updateProgress,
@@ -131,6 +140,8 @@ const gameController = (() => {
     changeClock(hours, minutes + 1);
   }
 
+  // create a function that would increase the player's semester
+  // everytime the belajar status of the player is reaching 1000
   const toggleActive = (status) => {
     player.status[status].isActive ?
       player.status[status].inactive() :
@@ -145,6 +156,13 @@ const gameController = (() => {
   const Algorithm = (() => {
     let makanBoost = true;
     return {
+      semesterUp: () => {
+        if (player.status.belajar.amount >= 1000) {
+          player.semester += 1;
+          player.status["belajar"].amount = 0;
+        }
+        DOM.updateSemester(player.semester);
+      },
       belajar: () => {
         if (player.status["belajar"].isActive) {
           player.status["makan"].changeShrink(6);
@@ -205,6 +223,7 @@ const gameController = (() => {
     player.update();
     updateClock();
 
+    Algorithm.semesterUp();
     Algorithm.belajar();
     Algorithm.tidur();
     Algorithm.makan();
@@ -217,10 +236,11 @@ const gameController = (() => {
         val, Math.round(player.status[val].amount / 10)
       );
     })
-  }, 1000);
+  }, 500);
 
   const init = (() => {
     DOM.changeName(player.name);
+    DOM.updateSemester(player.semester);
     initClock();
   })();
 
@@ -252,7 +272,11 @@ const Debug = (() => {
         break;
     }
   }
+  const maxBelajar = () => {
+    gameController.player.status["belajar"].amount = 950;
+  }
   return {
     timetravel,
+    maxBelajar,
   }
 })();
