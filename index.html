@@ -10,12 +10,16 @@
     <script src="https://kit.fontawesome.com/9d53a2f771.js" crossorigin="anonymous"></script>
   </head>
   <body class="vh-100">
-    <div class="container container-fluid-md d-flex p-4 h-100 flex-column justify-content-center align-items-center" id="container">
-      <div id="dashboard" class="mb-3 mx-md-5 w-100">
-        <div class="p-3 mb-2 bg-white rounded-3">
-
+    <div class="container container-fluid-md d-flex p-4 h-100 gap-3 flex-column justify-content-center align-items-center" id="container">
+      <div id="game-alert" class="position-absolute d-flex flex-row top-0 gap-3 m-4"></div>
+      
+      <div id="dashboard" class="row gx-5 m-2 p-2 position-relative align-items-center w-100 justify-content-center bg-white rounded-3">
+        <div class="col-md-3 p-2 rounded-3 overflow-hidden" id="avatar-container">
+          <img class="w-100 h-100" id="avatar" src="./assets/pika-smug.png" alt="" srcset="">
+        </div>
+        <div class="col p-3 flex-fill" style="width: 300px;">
           <div class="gap-2 mb-3 d-flex justify-content-between">
-            <h6 id="nama" class="">Halo, <span id="nama-player"></span></h6>
+            <h6 id="nama" class="">Halo, <span id="nama-player"></span>!</h6>
             <h6 id="semester" class="flex-fill text-center">Semester <span id="semester-now"></span></h6>
             <h6 id="jam" class="">09:30</h6>
           </div>

@@ -93,6 +93,20 @@ const DOM = (() => {
     })
   })();
 
+  const addAlert = (status, message) => {
+    const el = document.querySelector("#game-alert");
+    const alert = document.createElement("div");
+    alert.className = "alert alert-danger alert-dismissible fade show in";
+    alert.innerText = message;
+    alert.id = `alert-${status}`;
+    el.appendChild(alert);
+  }
+  const removeAlert = (status) => {
+    const el = document.querySelector(`#game-alert`);
+    const alert = document.querySelector(`#alert-${status}`);
+    el.removeChild(alert);
+  }
+
   const changeBg = (url) => {
     const bg = document.querySelector("#bg-image");
     if(bg.style.backgroundImage.includes(url)) return;
@@ -105,6 +119,8 @@ const DOM = (() => {
   }
 
   return {
+    addAlert,
+    removeAlert,
     updateSemester,
     changeName,
     changeBg,
@@ -158,6 +174,22 @@ const gameController = (() => {
 
   const Algorithm = (() => {
     let makanBoost = true;
+    let alert = {
+      makan: false,
+      main: false,
+      tidur: false,
+    }
+
+    const toggleAlert = (status) => {
+      let val = player.status[status].amount;
+      if( val < 100 && alert[status] === false) {
+        alert[status] = true;
+        DOM.addAlert(status, `${status} is running out!`);
+      } else if ( val >= 100 && alert[status] === true) {
+        alert[status] = false;
+        DOM.removeAlert(status);
+      }
+    }
     return {
       semesterUp: () => {
         if (player.status.belajar.amount >= 1000) {
@@ -177,12 +209,10 @@ const gameController = (() => {
       },
       tidur: () => {
         let hours = clock.getHours();
+        toggleAlert("tidur")
         if (player.status["tidur"].amount < 200) {
           player.status["belajar"].changeGrowth(10); 
           player.status["main"].changeShrink(30); 
-
-          // TODO
-          // Kasih prompt ketika udah kurang dari 100
         } else {
           player.status["belajar"].reset();
           player.status["main"].reset();
@@ -195,12 +225,11 @@ const gameController = (() => {
         }
       },
       makan: () => {
+        toggleAlert("makan");
         if (player.status["makan"].amount < 200) {
           player.status["belajar"].changeGrowth(10); 
           player.status["main"].changeShrink(30);
 
-          // TODO
-          // Kasih prompt ketika udah kurang dari 100
         } else {
           player.status["belajar"].reset();
           player.status["main"].reset();
@@ -215,6 +244,7 @@ const gameController = (() => {
         }
       },
       main: () => {
+        toggleAlert("main")
         if (player.status["main"].amount < 200) {
           player.status["belajar"].changeGrowth(20); 
         }
@@ -261,30 +291,38 @@ const gameController = (() => {
 })();
 
 const Debug = (() => {
-  const timetravel = (jam) => {
-    switch(jam) {
-      case "pagi":
-        gameController.changeClock(9, 55);
-        break;
-      case "siang":
-        gameController.changeClock(12, 55);
-        break;
-      case "sore":
-        gameController.changeClock(15, 35);
-        break;
-      case "malam":
-        gameController.changeClock(23, 55);
-        break;
-      default:
-        console.log("Menunya tidak ada");
-        break;
-    }
-  }
-  const maxBelajar = () => {
-    gameController.player.status["belajar"].amount = 950;
-  }
   return {
-    timetravel,
-    maxBelajar,
+    timetravel: (jam) => {
+      switch(jam) {
+        case "pagi":
+          gameController.changeClock(9, 55);
+          break;
+        case "siang":
+          gameController.changeClock(12, 55);
+          break;
+        case "sore":
+          gameController.changeClock(15, 35);
+          break;
+        case "malam":
+          gameController.changeClock(23, 55);
+          break;
+        default:
+          console.log("Menunya tidak ada");
+          break;
+      }
+    },
+    maxBelajar: () => {
+      gameController.player.status["belajar"].amount = 950;
+    },
+    turuninSemua: () => {
+      gameController.player.status["tidur"].amount = 150;
+      gameController.player.status["makan"].amount = 150;
+      gameController.player.status["main"].amount = 150;
+    },
+    naikinSemua: () => {
+      gameController.player.status["tidur"].amount = 900;
+      gameController.player.status["makan"].amount = 900;
+      gameController.player.status["main"].amount = 900;
+    }
   }
 })();
