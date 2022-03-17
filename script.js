@@ -30,10 +30,10 @@ const Player = (inName) => {
   let name = inName;
   // TODO
   // Bikin variabel untuk nyimpan url avatarnya
-  let belajar = new Status("belajar", 0, 4, 0);
-  let makan = new Status("makan", 500, 100, 4);
-  let main = new Status("main", 500, 6, 1);
-  let tidur = new Status("tidur", 500, 2, 1);
+  let belajar = new Status("belajar", 0, 40, 0); // NOTE: Gw nyoba naikin 10% biar lebih cepet
+  let makan = new Status("makan", 500, 100, 20); // NOTE: Gw nyoba naikin 10% biar lebih cepet
+  let main = new Status("main", 500, 60, 10); // NOTE: Gw nyoba naikin 10% biar lebih cepet
+  let tidur = new Status("tidur", 500, 20, 5); // NOTE: Gw nyoba naikin 10% biar lebih cepet
   
   let semester = 1;
 
@@ -137,7 +137,7 @@ const gameController = (() => {
   const updateClock = () => {
     const [hours, minutes] = [clock.getHours(), clock.getMinutes()];
     DOM.updateClock([hours, minutes]);
-    changeClock(hours, minutes + 1);
+    changeClock(hours, minutes + 5);
   }
 
   // create a function that would increase the player's semester
@@ -165,8 +165,8 @@ const gameController = (() => {
       },
       belajar: () => {
         if (player.status["belajar"].isActive) {
-          player.status["makan"].changeShrink(6);
-          player.status["main"].changeShrink(3);
+          player.status["makan"].changeShrink(60); // NOTE: Gw nyoba naikin 10% biar lebih cepet
+          player.status["main"].changeShrink(30); // NOTE: Gw nyoba naikin 10% biar lebih cepet
         } else {
           player.status["makan"].reset();
           player.status["main"].reset();
@@ -174,8 +174,8 @@ const gameController = (() => {
       },
       tidur: () => {
         if (player.status["tidur"].amount < 200) {
-          player.status["belajar"].changeGrowth(1);
-          player.status["main"].changeShrink(3);
+          player.status["belajar"].changeGrowth(10); // NOTE: Gw nyoba naikin 10% biar lebih cepet
+          player.status["main"].changeShrink(30); // NOTE: Gw nyoba naikin 10% biar lebih cepet
 
           // TODO
           // Kasih prompt ketika udah kurang dari 100
@@ -186,8 +186,8 @@ const gameController = (() => {
       },
       makan: () => {
         if (player.status["makan"].amount < 200) {
-          player.status["belajar"].changeGrowth(1);
-          player.status["main"].changeShrink(3);
+          player.status["belajar"].changeGrowth(10); // NOTE: Gw nyoba naikin 10% biar lebih cepet
+          player.status["main"].changeShrink(30); // NOTE: Gw nyoba naikin 10% biar lebih cepet
 
           // TODO
           // Kasih prompt ketika udah kurang dari 100
@@ -206,10 +206,10 @@ const gameController = (() => {
       },
       main: () => {
         if (player.status["main"].amount < 200) {
-          player.status["belajar"].changeGrowth(2);
+          player.status["belajar"].changeGrowth(20); // NOTE: Gw nyoba naikin 10% biar lebih cepet
         }
         else if (player.status["main"].amount < 100) {
-          player.status["belajar"].changeGrowth(1);
+          player.status["belajar"].changeGrowth(10); // NOTE: Gw nyoba naikin 10% biar lebih cepet
           // TODO
           // Kasih prompt ketika udah kurang dari 100
         } else {
@@ -229,14 +229,12 @@ const gameController = (() => {
     Algorithm.makan();
     Algorithm.main();
 
-    DOM.updateClock([clock.getHours(), clock.getMinutes()]);
-
     Object.keys(player.status).forEach(val => {
       DOM.updateProgress(
         val, Math.round(player.status[val].amount / 10)
       );
     })
-  }, 500);
+  }, 1000);
 
   const init = (() => {
     DOM.changeName(player.name);
