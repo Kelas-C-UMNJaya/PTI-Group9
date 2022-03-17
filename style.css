@@ -42,11 +42,10 @@ body {
 }
 
 #avatar-container {
-  height: 120px;
-  width: 120px;
+  height: 150px;
+  width: 150px;
 }
 
 #jam {
-  width: 3rem;
   text-align: right;
 }

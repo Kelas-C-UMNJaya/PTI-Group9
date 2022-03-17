@@ -12,20 +12,20 @@
   <body class="vh-100">
     <div class="container container-fluid-md d-flex p-4 h-100 gap-3 flex-column justify-content-center align-items-center" id="container">
       <div id="game-alert" class="position-absolute d-flex flex-row top-0 gap-3 m-4"></div>
-      
-      <div id="dashboard" class="row gx-5 m-2 p-2 position-relative align-items-center w-100 justify-content-center bg-white rounded-3">
-        <div class="col-md-3 p-2 rounded-3 overflow-hidden" id="avatar-container">
-          <img class="w-100 h-100" id="avatar" src="./assets/pika-smug.png" alt="" srcset="">
+      <div class="w-75 bg-light rounded-3 gap-2 d-flex flex-column flex-md-row justify-content-between align-items-center p-3">
+        <h6 id="nama" class="m-0">Halo, <span id="nama-player"></span>!</h6>
+        <h4 id="jam" class="m-0">09:30</h4>
+      </div>
+     
+      <div id="dashboard" class="row gx-5 m-2 p-2 position-relative align-items-center justify-content-center bg-white rounded-3">
+        <div class="col-sm-3 p-2 rounded-3 overflow-hidden" id="avatar-container">
+          <img class="h-100" id="avatar" src="./assets/pika-smug.png" alt="" srcset="">
         </div>
         <div class="col p-3 flex-fill" style="width: 300px;">
-          <div class="gap-2 mb-3 d-flex justify-content-between">
-            <h6 id="nama" class="">Halo, <span id="nama-player"></span>!</h6>
-            <h6 id="semester" class="flex-fill text-center">Semester <span id="semester-now"></span></h6>
-            <h6 id="jam" class="">09:30</h6>
-          </div>
 
-          <div id="statusBar" class="row w-100 m-0">
-            <div class="col-sm-6 d-flex gap-2 align-items-center justify-content-between">
+          <div id="statusBar" class="w-100 m-0">
+          <h6 id="semester" class="mb-2 text-center text-md-left">Semester <span id="semester-now"></span></h6>
+            <div class="d-flex gap-2 align-items-center justify-content-between">
               <span style="width: 1.2rem;" class="text-center"><i class="fa-solid fa-utensils"></i></span>
               <div class="col">
                 <div class="progress">
@@ -34,7 +34,7 @@
               </div>
             </div>
 
-            <div class="col-sm-6 d-flex gap-2 align-items-center justify-content-between">
+            <div class="d-flex gap-2 align-items-center justify-content-between">
               <span style="width: 1.2rem;" class="text-center"><i class="fa-solid fa-gamepad"></i></span>
               <div class="col">
                 <div class="progress">
@@ -43,7 +43,7 @@
               </div>
             </div>
 
-            <div class="col-sm-6 d-flex gap-2 align-items-center justify-content-between">
+            <div class="d-flex gap-2 align-items-center justify-content-between">
               <span style="width: 1.2rem;" class="text-center"><i class="fa-solid fa-brain"></i></span>
               <div class="col">
                 <div class="progress">
@@ -52,7 +52,7 @@
               </div>
             </div>
 
-            <div class="col-sm-6 d-flex gap-2 align-items-center justify-content-between">
+            <div class="d-flex gap-2 align-items-center justify-content-between">
               <span style="width: 1.2rem;" class="text-center"><i class="fa-solid fa-bed"></i></span>
               <div class="col">
                 <div class="progress">

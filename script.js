@@ -54,6 +54,8 @@ const Player = (inName) => {
 };
 
 const DOM = (() => {
+  // TODO
+  // BIKIN BERKEDIP KALAU DIBAWAH 10%
   const updateProgress = (status, val) => {
     const el = document.querySelector(`#${status}-progressBar`);
     el.style.width = `${val}%`;
@@ -92,6 +94,10 @@ const DOM = (() => {
       });
     })
   })();
+  
+  // TODO 
+  // BIKIN JADI SATU AJA ALERTNYA
+  // GA BANYAK
 
   const addAlert = (status, message) => {
     const el = document.querySelector("#game-alert");
