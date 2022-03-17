@@ -1,6 +1,29 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap');
-
+@media (min-width: 1200px) {
+  .container, .container-lg, .container-md, .container-sm, .container-xl {
+    max-width: 700px;
+  }
+}
 body {
-  margin:0;
-  font-family: 'Roboto', sans-serif; 
+  position: relative;
+}
+
+#bg-image{
+  background-image: url("./assets/day.png");
+  background-size: cover;
+  background-position: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: -1;
+}
+
+#container {
+  z-index: 1;
+}
+
+#jam {
+  width: 3rem;
+  text-align: right;
 }
