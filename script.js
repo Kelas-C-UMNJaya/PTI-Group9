@@ -30,10 +30,10 @@ const Player = (inName) => {
   let name = inName;
   // TODO
   // Bikin variabel untuk nyimpan url avatarnya
-  let belajar = new Status("belajar", 0, 40, 0); // NOTE: Gw nyoba naikin 10% biar lebih cepet
-  let makan = new Status("makan", 500, 100, 20); // NOTE: Gw nyoba naikin 10% biar lebih cepet
-  let main = new Status("main", 500, 60, 10); // NOTE: Gw nyoba naikin 10% biar lebih cepet
-  let tidur = new Status("tidur", 500, 20, 5); // NOTE: Gw nyoba naikin 10% biar lebih cepet
+  let belajar = new Status("belajar", 0, 10, 0); 
+  let makan = new Status("makan", 500, 100, 4); 
+  let main = new Status("main", 500, 60, 8); 
+  let tidur = new Status("tidur", 500, 20, 1); 
   
   let semester = 1;
 
@@ -93,15 +93,10 @@ const DOM = (() => {
     })
   })();
 
-  const changeBg = (hours) => {
+  const changeBg = (url) => {
     const bg = document.querySelector("#bg-image");
-    if (hours >= 6 && hours <= 16) {
-      bg.style.backgroundImage = "url('./assets/day.png')";
-    } else if (hours >= 16 && hours <= 20) {
-      bg.style.backgroundImage = "url('./assets/evening.png')";
-    } else {
-      bg.style.backgroundImage = "url('./assets/night.png')";
-    }
+    if(bg.style.backgroundImage.includes(url)) return;
+    bg.style.backgroundImage = `url(${url})`;
   }
 
   const changeName = (name) => {;
@@ -132,7 +127,17 @@ const gameController = (() => {
   const changeClock = (hours, minutes) => {
     clock.setHours(hours);
     clock.setMinutes(minutes);
-    DOM.changeBg(hours);
+    let day = "./assets/day.png";
+    let evening = "./assets/evening.png";
+    let night = "./assets/night.png";
+    if (clock.getHours() >= 6 && clock.getHours() < 16) {
+      DOM.changeBg(day);
+    } else if (clock.getHours() >= 16 && clock.getHours() < 19) {
+      DOM.changeBg(evening);
+    } else if ((clock.getHours() >= 19 && clock.getHours() <= 24) 
+            || (clock.getHours() >= 0 && clock.getHours() < 6)) {
+      DOM.changeBg(night);
+    }
   };
   const updateClock = () => {
     const [hours, minutes] = [clock.getHours(), clock.getMinutes()];
@@ -140,8 +145,6 @@ const gameController = (() => {
     changeClock(hours, minutes + 5);
   }
 
-  // create a function that would increase the player's semester
-  // everytime the belajar status of the player is reaching 1000
   const toggleActive = (status) => {
     player.status[status].isActive ?
       player.status[status].inactive() :
@@ -165,17 +168,18 @@ const gameController = (() => {
       },
       belajar: () => {
         if (player.status["belajar"].isActive) {
-          player.status["makan"].changeShrink(60); // NOTE: Gw nyoba naikin 10% biar lebih cepet
-          player.status["main"].changeShrink(30); // NOTE: Gw nyoba naikin 10% biar lebih cepet
+          player.status["makan"].changeShrink(8); 
+          player.status["main"].changeShrink(10); 
         } else {
           player.status["makan"].reset();
           player.status["main"].reset();
         }
       },
       tidur: () => {
+        let hours = clock.getHours();
         if (player.status["tidur"].amount < 200) {
-          player.status["belajar"].changeGrowth(10); // NOTE: Gw nyoba naikin 10% biar lebih cepet
-          player.status["main"].changeShrink(30); // NOTE: Gw nyoba naikin 10% biar lebih cepet
+          player.status["belajar"].changeGrowth(10); 
+          player.status["main"].changeShrink(30); 
 
           // TODO
           // Kasih prompt ketika udah kurang dari 100
@@ -183,11 +187,17 @@ const gameController = (() => {
           player.status["belajar"].reset();
           player.status["main"].reset();
         }
+
+        if (!(hours > 6 && hours < 22)) {
+          player.status["tidur"].changeShrink(10);
+        } else {
+          player.status["tidur"].reset();
+        }
       },
       makan: () => {
         if (player.status["makan"].amount < 200) {
-          player.status["belajar"].changeGrowth(10); // NOTE: Gw nyoba naikin 10% biar lebih cepet
-          player.status["main"].changeShrink(30); // NOTE: Gw nyoba naikin 10% biar lebih cepet
+          player.status["belajar"].changeGrowth(10); 
+          player.status["main"].changeShrink(30);
 
           // TODO
           // Kasih prompt ketika udah kurang dari 100
@@ -206,10 +216,10 @@ const gameController = (() => {
       },
       main: () => {
         if (player.status["main"].amount < 200) {
-          player.status["belajar"].changeGrowth(20); // NOTE: Gw nyoba naikin 10% biar lebih cepet
+          player.status["belajar"].changeGrowth(20); 
         }
         else if (player.status["main"].amount < 100) {
-          player.status["belajar"].changeGrowth(10); // NOTE: Gw nyoba naikin 10% biar lebih cepet
+          player.status["belajar"].changeGrowth(10); 
           // TODO
           // Kasih prompt ketika udah kurang dari 100
         } else {
@@ -260,7 +270,7 @@ const Debug = (() => {
         gameController.changeClock(12, 55);
         break;
       case "sore":
-        gameController.changeClock(16, 55);
+        gameController.changeClock(15, 35);
         break;
       case "malam":
         gameController.changeClock(23, 55);

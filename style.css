@@ -3,6 +3,19 @@
     max-width: 700px;
   }
 }
+
+@keyframes fade {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
 body {
   position: relative;
 }
@@ -17,6 +30,7 @@ body {
   height: 100%;
   width: 100%;
   z-index: -1;
+  transition: background-image 1s ease-in-out;
 }
 
 #container {
