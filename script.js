@@ -138,6 +138,9 @@ const DOM = (() => {
     },
     fadeIn: (el) => {
       el.classList.remove("fadeOut");
+      setTimeout(() => {
+        el.style.visibility = "visible";
+      }, 1000);
     }
   }
 })();
