@@ -54,96 +54,88 @@ const Player = (inName) => {
 };
 
 const DOM = (() => {
-  // TODO
-  // BIKIN BERKEDIP KALAU DIBAWAH 10%
-  const updateProgress = (status, val) => {
-    const el = document.querySelector(`#${status}-progressBar`);
-    el.style.width = `${val}%`;
-    el.innerText = `${val}%`;
-    if (val >= 20 && val <= 30) {
-      el.classList.add("bg-warning");
-      el.classList.remove("bg-danger");
-    }
-    else if (val < 20) {
-      el.classList.add("bg-danger");
-      el.classList.remove("bg-warning");
-    } else {
-      el.classList.remove("bg-danger");
-      el.classList.remove("bg-warning");
-    }
-  }
-  const updateSemester = (val) => {
-    const el = document.querySelector("#semester-now");
-    el.innerText = val;
-  }
-
-  const updateClock = ([hours, minutes]) => {
-    hours = hours >= 10 ? hours : "0" + hours;
-    minutes = minutes >= 10 ? minutes : "0" + minutes;
-    const clock = document.querySelector("#jam");
-    clock.innerText = `${hours}:${minutes}`;
-  }
-
   const updateButton = (() => {
-    let buttons = document.querySelectorAll(".togglebutton");
-    buttons.forEach(button => {
-      button.addEventListener("click", (e) => {
-        gameController.toggleActive(e.target.dataset.name);
-        button.classList.remove("btn-light");
-        button.classList.add("btn-warning");
-        buttons.forEach(button => {
-          if (button != e.target) {
+      let buttons = document.querySelectorAll(".togglebutton");
+      buttons.forEach(button => {
+        button.addEventListener("click", (e) => {
+          gameController.toggleActive(e.target.dataset.name);
+          button.classList.remove("btn-light");
+          button.classList.add("btn-warning");
+          buttons.forEach(button => {
+            if (button != e.target) {
+              button.classList.remove("btn-warning");
+              button.classList.remove("active");
+              button.classList.add("btn-light");
+            }
+          });
+          if (!(button.classList.contains("active"))) {
             button.classList.remove("btn-warning");
-            button.classList.remove("active");
             button.classList.add("btn-light");
           }
         });
-        if (!(button.classList.contains("active"))) {
-          button.classList.remove("btn-warning");
-          button.classList.add("btn-light");
-        }
-      });
-    })
-  })();
-  
-  // TODO 
-  // BIKIN JADI SATU AJA ALERTNYA
-  // GA BANYAK
-
-  const addAlert = (message) => {
-    const el = document.querySelector("#game-alert");
-    const alert = document.createElement("div");
-    alert.className = "alert alert-danger fade show in";
-    alert.innerText = message;
-    alert.id = "alert-msg"
-    el.appendChild(alert);
-  }
-  const removeAlert = () => {
-    const el = document.querySelector(`#game-alert`);
-    const alert = document.querySelector(`#alert-msg`);
-    el.removeChild(alert);
-  }
-
-  const changeBg = (url) => {
-    const bg = document.querySelector("#bg-image");
-    if(bg.style.backgroundImage.includes(url)) return;
-    bg.style.backgroundImage = `url(${url})`;
-  }
-
-  const changeName = (name) => {;
-    const el = document.querySelector("#nama-player");
-    el.innerText = name;
-  }
-
+      })
+    })();
   return {
-    addAlert,
-    removeAlert,
-    updateSemester,
-    changeName,
-    changeBg,
-    updateProgress,
-    updateClock,
     updateButton,
+    updateProgress: (status, val) => {
+      const el = document.querySelector(`#${status}-progressBar`);
+      el.style.width = `${val}%`;
+      el.innerText = `${val}%`;
+      if (val >= 20 && val <= 30) {
+        el.classList.add("bg-warning");
+        el.classList.remove("bg-danger");
+      }
+      else if (val < 20) {
+        el.classList.add("bg-danger");
+        el.classList.remove("bg-warning");
+      } else {
+        el.classList.remove("bg-danger");
+        el.classList.remove("bg-warning");
+      }
+    },
+    updateSemester: (val) => {
+      const el = document.querySelector("#semester-now");
+      el.innerText = val;
+    },
+
+    updateClock: ([hours, minutes]) => {
+      hours = hours >= 10 ? hours : "0" + hours;
+      minutes = minutes >= 10 ? minutes : "0" + minutes;
+      const clock = document.querySelector("#jam");
+      clock.innerText = `${hours}:${minutes}`;
+    },
+
+    addAlert: (message) => {
+      const el = document.querySelector("#game-alert");
+      const alert = document.createElement("div");
+      alert.className = "alert alert-danger fade show in";
+      alert.innerText = message;
+      alert.id = "alert-msg"
+      el.appendChild(alert);
+    },
+    removeAlert: () => {
+      const el = document.querySelector(`#game-alert`);
+      const alert = document.querySelector(`#alert-msg`);
+      el.removeChild(alert);
+    },
+
+    changeBg: (url) => {
+      const bg = document.querySelector("#bg-image");
+      if(bg.style.backgroundImage.includes(url)) return;
+      bg.style.backgroundImage = `url(${url})`;
+    },
+
+    changeName: (name) => {;
+      const el = document.querySelector("#nama-player");
+      el.innerText = name;
+    },
+
+    fadeOut: (el) => {
+      el.classList.add("fadeOut");
+    },
+    fadeIn: (el) => {
+      el.classList.remove("fadeOut");
+    }
   }
 })();
 
@@ -336,6 +328,12 @@ const Debug = (() => {
       gameController.player.status["tidur"].amount = 900;
       gameController.player.status["makan"].amount = 900;
       gameController.player.status["main"].amount = 900;
+    },
+    fadeInGame: () => {
+      DOM.fadeIn(document.querySelector("#main-game"));
+    },
+    fadeOutGame: () => {
+      DOM.fadeOut(document.querySelector("#main-game"));
     }
   }
 })();

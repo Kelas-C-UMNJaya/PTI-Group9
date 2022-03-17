@@ -8,11 +8,8 @@
   0% {
     opacity: 0;
   }
-  50% {
-    opacity: 1;
-  }
   100% {
-    opacity: 0;
+    opacity: 1;
   }
 }
 
@@ -33,7 +30,7 @@ body {
   transition: background-image 1s ease-in-out;
 }
 
-#container {
+#main-game {
   z-index: 1;
 }
 
@@ -48,4 +45,14 @@ body {
 
 #jam {
   text-align: right;
+}
+
+.fadeBase {
+  opacity: 1;
+  transition: opacity 1s ease-in-out;
+}
+
+.fadeOut {
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
 }
