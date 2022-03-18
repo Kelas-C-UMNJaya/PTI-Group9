@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  <title>Hello World!</title>
+  <title>AUL Simulator</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -13,6 +13,50 @@
 </head>
 
 <body class="vh-100">
+  <div id="help" class="m-4 text-white position-absolute top-0 end-0">
+    <a id="help-button" data-bs-toggle="modal" data-bs-target="#help-menu">
+        <i class="fa-solid fa-circle-question fa-2x"></i>
+    </a>
+  </div>
+  
+  <div id="menu-help" class="justify-content-center align-items-center d-flex">
+    <div class="modal fade" id="help-menu" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="gamehelp" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="gamehelp">Bantuan</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <h3>Aturan</h3>
+            <ol>
+              <li>Untuk menyelesaikan game ini, pemain perlu menyelesaikan 8 semester pada AUL simulator.</li>
+              <li>Untuk memulai game pemain dapat memilih avatar yang diinginkan dan memasukkan nama. Kemudian tekan 'main sekarang'.</li>
+              <li>Terdapat 4 tombol dan 4 status bar yang akan manjadi bagian dalam game (main, belajar, makan, tidur).</li>
+              <li>Untuk mengaktifkan status hanya perlu menekan tombol sekali saja dan status akan bertambah.</li>
+              <li>Setiap status yang diaktifkan akan berpengaruh pada status lainnya misal (aktifkan belajar maka main dan makan akan berkurang).</li>
+              <li>Apabila pemain idle atau tidak melakukan aktifitas apapun maka seluruh status akan berkurang secara dinamis.</li>
+              <li>Apabila pemain ingin keluar dari permainan namun tidak ingin kehilangan prosesnya maka pemain dapat menekan tombol save.</li>
+              <li>Permainan akan melakukan auto save pada jam 12 siang dan jam 12 malam di dalam simulator.</li>
+              <li>Apabila pemain tidak mengaktifkan status belajar selama 6 jam di dalam simulator maka pemain akan di D.O (game over).</li>
+              <li>Jika salah satu dari 3 status bar (makan, main, tidur) habis/kosong maka permainan akan berakhir (game over).</li>
+            </ol>
+            <h3>Credits</h3>
+            <ol>
+              <li><b>Rivo Juicer Wowor (00000059635)</b><br>
+                  Lead Developer</li>
+              <li><b>Felix Rafael (00000060086)</b><br>
+                  Game and Algorithm Designer</li>
+              <li><b>Fadhil Dzaky Muhammad (00000058398)</b><br>
+                  Web Scripting and Javascript Developer</li>
+              <li><b>Auliyaa Vishwakarma Hestia (00000059515)</b><br>
+                  Front-end Engineer and Designer</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
 <!-- AVATAR SELECTION SCENE -->
 <div class="fadeBase fadeOut container position-relative d-flex flex-column flex-md-row align-items-center justify-content-center gap-3" id="avatar-selection">
@@ -21,7 +65,7 @@
         <img class="" src="assets/logo.svg" alt="logo">
         <div id="avatar-desc" class="p-3 bg-light text-center rounded-3">
           <p class="my-auto">
-            Sebuah game yang mencoba mensimulasikan kehidupan seorang mahasiswa.
+            Sebuah game yang mencoba mengsimulasikan kehidupan seorang mahasiswa.
           </p>
         </div>
       </div>
@@ -112,7 +156,7 @@
     id="main-game">
     <div id="pause" class="m-4 text-white position-absolute top-0 left-0">
       <a id="pause-button" data-bs-toggle="modal" data-bs-target="#pause-menu">
-          <i class="fa-solid fa-pause fa-3x"></i>
+          <i class="fa-solid fa-pause fa-2x"></i>
       </a>
     </div>
 

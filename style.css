@@ -80,6 +80,10 @@ body {
   transition: opacity 500ms ease-in-out;
 }
 
+#help-button{
+  cursor: pointer;
+}
+
 #pause-button{
   cursor: pointer;
 }

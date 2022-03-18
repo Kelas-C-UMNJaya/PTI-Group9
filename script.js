@@ -100,7 +100,7 @@ const DOM = (() => {
     let submitBtn = document.querySelector("#avatar-button");
     let textbox = document.querySelector("#name-input");
     submitBtn.addEventListener("click", () => {
-      let name = textbox.value;
+      let name = textbox.value ? textbox.value : "Agus";
       let image = document.querySelector(".carousel-item.active").querySelector("img").getAttribute("src");
       gameController.init(name, image);
     })
@@ -129,9 +129,9 @@ const DOM = (() => {
     })
     save.addEventListener("click", () => {
       gameController.saveGame();
-      DOM.addAlert("Game berhasil disave!")
+      DOM.addAlert("Game berhasil disave!", "save")
       setTimeout(() => {
-        DOM.removeAlert("#alert-msg");
+        DOM.removeAlert("save");
       }, 2000);
     });
   })();
@@ -156,7 +156,7 @@ const DOM = (() => {
         case "makan": gameOverMsg.innerText = "Anda mati kelaparan!"; break;
         case "main": gameOverMsg.innerText = "Anda stress kurang hiburan!"; break;
         case "tidur": gameOverMsg.innerText = "Anda mati kurang tidur!"; break;
-        // case "belajar": gameOverMsg.innerText = "Anda mati kelaparan!"; break;
+        case "belajar": gameOverMsg.innerText = "Anda DO karena tidak belajar!"; break;
       }
       reset.addEventListener("click", ()=> {
         gameController.reset();
@@ -183,7 +183,7 @@ const DOM = (() => {
       const main = "./assets/avatar/status/act_main.png";
       const belajar = "./assets/avatar/status/act_belajar.png";
       const tidur = "./assets/avatar/status/act_tidur.png";
-      console.log(status);
+      // console.log(status);
       switch (status) {
         case "makan": el.src = makan; break;
         case "main": el.src = main; break;
@@ -220,17 +220,18 @@ const DOM = (() => {
       clock.innerText = `${hours}:${minutes}`;
     },
 
-    addAlert: (message) => {
+    addAlert: (message, id) => {
       const el = document.querySelector("#game-alert");
       const alert = document.createElement("div");
       alert.className = "alert alert-danger fade show in";
       alert.innerText = message;
-      alert.id = "alert-msg"
+      alert.id = `alert-${id}`;
       el.appendChild(alert);
     },
-    removeAlert: () => {
+    removeAlert: (id) => {
       const el = document.querySelector(`#game-alert`);
-      const alert = document.querySelector(`#alert-msg`);
+      const alert = document.querySelector(`#alert-${id}`);
+      if (!alert) return;
       el.removeChild(alert);
     },
 
@@ -323,21 +324,36 @@ const gameController = (() => {
   const Algorithm = (() => {
     let makanBoost = true;
     let alert = false;
+    let alertDO = false;
     let changes = {
       belajar: {makan: 0, main: 0},
       tidur: {belajar: 0, main: 0, shrink: 0},
       makan: {belajar: 0, main: 0, boost: 0},
       main: {belajar20: 0, belajar10: 0},
     };
+    let countBeforeDO = 0;
 
     const toggleAlert = (status) => {
       let val = player.status[status].amount;
       if( val < 100 && alert === false) {
         alert = true;
-        DOM.addAlert(`Kondisi anda memburuk!`);
+        DOM.addAlert(`Kondisi anda memburuk!`, "status");
       } else if ( val >= 100 && alert === true) {
         alert = false;
-        DOM.removeAlert();
+        DOM.removeAlert("status");
+      }
+    }
+
+    const toggleAlertDO = () => {
+      // console.log(countBeforeDO);
+      if (countBeforeDO > 72) {
+        gameController.gameOver("belajar");
+      } else if (countBeforeDO >= 36 && alertDO === false) {
+        alertDO = true;
+        DOM.addAlert("Segera belajar sebelum DO!", "belajar");
+      } else if (countBeforeDO < 36 && alertDO === true) {
+        alertDO = false;
+        DOM.removeAlert("belajar");
       }
     }
 
@@ -345,6 +361,7 @@ const gameController = (() => {
       getChanges: () => {
         return changes;
       },
+      countBeforeDO,
       semesterUp: () => {
         if (player.semester > 8) {
           gameController.gameClock.stop();
@@ -523,12 +540,15 @@ const gameController = (() => {
         DOM.updateSemester(player.semester);
       },
       belajar: () => {
+        toggleAlertDO();
         if (player.status["belajar"].isActive) {
           player.status["makan"].changeShrink(changes.belajar.makan); 
           player.status["main"].changeShrink(changes.belajar.main); 
+          countBeforeDO--;
         } else {
           player.status["makan"].reset();
           player.status["main"].reset();
+          countBeforeDO++;
         }
       },
       tidur: () => {
@@ -624,7 +644,7 @@ const gameController = (() => {
     let data = JSON.parse(localStorage.getItem("player"));
     let clockSave = new Date(JSON.parse(localStorage.getItem("clock")));
     if (data) {
-      console.log(clockSave);
+      // console.log(clockSave);
       clock = clockSave;
       player = Player(data.name, data.avatar, data.semester, data.status);
       // updateClock(clockSave.getHours, clockSave.getMinutes)
@@ -655,6 +675,7 @@ const gameController = (() => {
     DOM.changeName(player.name);
     DOM.changeAvatar(player.avatar);
     DOM.updateSemester(player.semester);
+    Algorithm.countBeforeDO = 0;
     initClock();
 
     DOM.fadeOut(document.querySelector("#avatar-selection"));
