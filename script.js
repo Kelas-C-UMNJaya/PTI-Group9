@@ -102,7 +102,30 @@ const DOM = (() => {
       gameController.init(name, image);
     })
   })();
-  
+  const pauseMenu = (() => {
+    let pause = document.querySelector("#pause-button");
+    let resume = document.querySelector("#resume-btn");
+    let restart = document.querySelector("#restart-btn");
+    let save = document.querySelector("#save-btn");
+    pause.addEventListener("click", () => {
+      gameController.gameClock.stop();
+    })
+    resume.addEventListener("click", () => {
+      gameController.gameClock.start();
+    })
+    restart.addEventListener("click", () => {
+      gameController.reset();
+      DOM.scene("avatar-selection");
+    })
+    save.addEventListener("click", () => {
+      gameController.saveGame();
+      DOM.addAlert("Game berhasil disave!")
+      setTimeout(() => {
+        DOM.removeAlert("#alert-msg");
+      }, 2000);
+    });
+  })();
+ 
   return {
     updateButton,
     greetingPlayer,
@@ -588,6 +611,7 @@ const gameController = (() => {
     reset,
     changeClock,
     saveGame,
+    gameClock,
     loadGame,
     gameOver,
     toggleActive,
