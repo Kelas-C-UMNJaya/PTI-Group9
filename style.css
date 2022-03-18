@@ -63,12 +63,12 @@ body {
 
 .fadeBase {
   opacity: 1;
-  transition: opacity 1s ease-in-out;
+  transition: opacity 500ms ease-in-out;
 }
 
 .fadeOut {
   opacity: 0;
-  transition: opacity 1s ease-in-out;
+  transition: opacity 500ms ease-in-out;
 }
 
 #pause-button{

@@ -20,6 +20,7 @@ class Status {
 
   changeGrowth = (val) => { this.growth = val; }
   changeShrink = (val) => { this.shrink = val; }
+  changeDefault = (growth, shrink) => { this.default = { growth: growth, shrink: shrink }; };
 
   reset = () => {
     [this.growth, this.shrink] = [this.default.growth, this.default.shrink];
@@ -81,6 +82,18 @@ const DOM = (() => {
         });
       })
     })();
+
+  const greetingPlayer = (hour) => {
+    let greeting = document.querySelector("#greeting-player");
+    let greetingText = "";
+    if (hour >= 5 && hour <= 10) greetingText = "Selamat Pagi";
+    else if (hour >= 11 && hour <= 15) greetingText = "Selamat Siang";
+    else if (hour >= 16 && hour <= 18) greetingText = "Selamat Sore";
+    else if (hour >= 19 && hour <= 24) greetingText = "Selamat Malam";
+    else if (hour >= 0 && hour <= 4) greetingText = "Selamat Malam";
+    greeting.innerText = greetingText;
+  };
+
   const getUserInit = (() => {
     let submitBtn = document.querySelector("#avatar-button");
     submitBtn.addEventListener("click", () => {
@@ -88,9 +101,21 @@ const DOM = (() => {
       let image = document.querySelector(".carousel-item.active").querySelector("img").getAttribute("src");
       gameController.init(name, image);
     })
-  })()
+  })();
+  
   return {
     updateButton,
+    greetingPlayer,
+    gameOver: (status) => {
+      DOM.scene("game-over");
+      let gameOverMsg = document.querySelector("#gameover-message");
+      switch (status) {
+        case "makan": gameOverMsg.innerText = "Anda mati kelaparan!"; break;
+        case "main": gameOverMsg.innerText = "Anda stress kurang hiburan!"; break;
+        case "tidur": gameOverMsg.innerText = "Anda mati kurang tidur!"; break;
+        // case "belajar": gameOverMsg.innerText = "Anda mati kelaparan!"; break;
+      }
+    },
     changeAvatar: (url) => {
       let el = document.querySelector("#avatar");
       el.src = url;
@@ -218,6 +243,12 @@ const gameController = (() => {
   const Algorithm = (() => {
     let makanBoost = true;
     let alert = false;
+    let changes = {
+      belajar: {makan: 0, main: 0},
+      tidur: {belajar: 0, main: 0, shrink: 0},
+      makan: {belajar: 0, main: 0, boost: 0},
+      main: {belajar20: 0, belajar10: 0},
+    };
 
     const toggleAlert = (status) => {
       let val = player.status[status].amount;
@@ -229,18 +260,188 @@ const gameController = (() => {
         DOM.removeAlert();
       }
     }
+
     return {
+      getChanges: () => {
+        return changes;
+      },
       semesterUp: () => {
         if (player.status.belajar.amount >= 1000) {
           player.semester += 1;
           player.status["belajar"].amount = 0;
-        }
+        }     
+        switch(player.semester) {
+          case 1:
+            player.status["belajar"].changeDefault(10, 0);
+            player.status["makan"].changeDefault(100, 4);
+            player.status["main"].changeDefault(60, 8);
+            player.status["tidur"].changeDefault(20, 1);
+
+            changes.belajar.makan = 8;
+            changes.belajar.main = 10
+
+            changes.tidur.belajar = 10
+            changes.tidur.main = 30
+            changes.tidur.shrink = 10
+
+            changes.makan.belajar = 10
+            changes.makan.main = 30;
+            changes.makan.boost = 20;
+
+            changes.main.belajar20 = 20;
+            changes.main.belajar10 = 10;
+            break;
+          case 2:
+            player.status["belajar"].changeDefault(10, 0);
+            player.status["makan"].changeDefault(50, 5);
+            player.status["main"].changeDefault(50, 10);
+            player.status["tidur"].changeDefault(20, 1);
+
+            changes.belajar.makan = 8;
+            changes.belajar.main = 10
+
+            changes.tidur.belajar = 10
+            changes.tidur.main = 30
+            changes.tidur.shrink = 10
+
+            changes.makan.belajar = 10
+            changes.makan.main = 30;
+            changes.makan.boost = 20;
+
+            changes.main.belajar20 = 20;
+            changes.main.belajar10 = 10;
+            break;
+          case 3:
+            player.status["belajar"].changeDefault(10, 0);
+            player.status["makan"].changeDefault(50, 5);
+            player.status["main"].changeDefault(50, 10);
+            player.status["tidur"].changeDefault(20, 2);
+
+            changes.belajar.makan = 10;
+            changes.belajar.main = 12
+
+            changes.tidur.belajar = 8 
+            changes.tidur.main = 30
+            changes.tidur.shrink = 10
+
+            changes.makan.belajar = 10
+            changes.makan.main = 30;
+            changes.makan.boost = 20;
+
+            changes.main.belajar20 = 20;
+            changes.main.belajar10 = 10;
+            break;
+
+          case 4:
+            player.status["belajar"].changeDefault(10, 0);
+            player.status["makan"].changeDefault(50, 6);
+            player.status["main"].changeDefault(50, 10);
+            player.status["tidur"].changeDefault(18, 2);
+
+            changes.belajar.makan = 10;
+            changes.belajar.main = 12
+
+            changes.tidur.belajar = 7
+            changes.tidur.main = 32
+            changes.tidur.shrink = 11
+
+            changes.makan.belajar = 8 
+            changes.makan.main = 32;
+            changes.makan.boost = 18;
+
+            changes.main.belajar20 = 18;
+            changes.main.belajar10 = 8;
+            break;
+
+          case 5:
+            player.status["belajar"].changeDefault(8, 0);
+            player.status["makan"].changeDefault(40, 6);
+            player.status["main"].changeDefault(45, 10);
+            player.status["tidur"].changeDefault(18, 2);
+
+            changes.belajar.makan = 12;
+            changes.belajar.main = 14
+
+            changes.tidur.belajar = 7
+            changes.tidur.main = 32
+            changes.tidur.shrink = 13
+
+            changes.makan.belajar = 7 
+            changes.makan.main = 32;
+            changes.makan.boost = 16;
+
+            changes.main.belajar20 = 16;
+            changes.main.belajar10 = 7;
+            break;
+         
+          case 6:
+            player.status["belajar"].changeDefault(8, 0);
+            player.status["makan"].changeDefault(40, 6);
+            player.status["main"].changeDefault(40, 12);
+            player.status["tidur"].changeDefault(17, 2);
+
+            changes.belajar.makan = 13;
+            changes.belajar.main = 15
+
+            changes.tidur.belajar = 6
+            changes.tidur.main = 33
+            changes.tidur.shrink = 14
+
+            changes.makan.belajar = 7 
+            changes.makan.main = 33;
+            changes.makan.boost = 16;
+
+            changes.main.belajar20 = 16;
+            changes.main.belajar10 = 7;
+            break;         
+          case 7:
+            player.status["belajar"].changeDefault(7, 0);
+            player.status["makan"].changeDefault(40, 6);
+            player.status["main"].changeDefault(40, 12);
+            player.status["tidur"].changeDefault(17, 2);
+
+            changes.belajar.makan = 13;
+            changes.belajar.main = 15
+
+            changes.tidur.belajar = 6
+            changes.tidur.main = 33
+            changes.tidur.shrink = 14
+
+            changes.makan.belajar = 6 
+            changes.makan.main = 33;
+            changes.makan.boost = 15;
+
+            changes.main.belajar20 = 15;
+            changes.main.belajar10 = 6;
+            break;         
+          case 8:
+            player.status["belajar"].changeDefault(6, 0);
+            player.status["makan"].changeDefault(40, 7);
+            player.status["main"].changeDefault(40, 14);
+            player.status["tidur"].changeDefault(16, 3);
+
+            changes.belajar.makan = 14;
+            changes.belajar.main = 16
+
+            changes.tidur.belajar = 4
+            changes.tidur.main = 35
+            changes.tidur.shrink = 15
+
+            changes.makan.belajar = 5 
+            changes.makan.main = 35;
+            changes.makan.boost = 14;
+
+            changes.main.belajar20 = 12;
+            changes.main.belajar10 = 5;
+            break;
+        };
+
         DOM.updateSemester(player.semester);
       },
       belajar: () => {
         if (player.status["belajar"].isActive) {
-          player.status["makan"].changeShrink(8); 
-          player.status["main"].changeShrink(10); 
+          player.status["makan"].changeShrink(changes.belajar.makan); 
+          player.status["main"].changeShrink(changes.belajar.main); 
         } else {
           player.status["makan"].reset();
           player.status["main"].reset();
@@ -250,15 +451,15 @@ const gameController = (() => {
         let hours = clock.getHours();
         toggleAlert("tidur")
         if (player.status["tidur"].amount < 200) {
-          player.status["belajar"].changeGrowth(10); 
-          player.status["main"].changeShrink(30); 
+          player.status["belajar"].changeGrowth(changes.tidur.belajar); 
+          player.status["main"].changeShrink(changes.tidur.main); 
         } else {
           player.status["belajar"].reset();
           player.status["main"].reset();
         }
 
         if (!(hours > 6 && hours < 22)) {
-          player.status["tidur"].changeShrink(10);
+          player.status["tidur"].changeShrink(changes.tidur.shrink);
         } else {
           player.status["tidur"].reset();
         }
@@ -266,8 +467,8 @@ const gameController = (() => {
       makan: () => {
         toggleAlert("makan");
         if (player.status["makan"].amount < 200) {
-          player.status["belajar"].changeGrowth(10); 
-          player.status["main"].changeShrink(30);
+          player.status["belajar"].changeGrowth(changes.makan.belajar); 
+          player.status["main"].changeShrink(changes.makan.main);
 
         } else {
           player.status["belajar"].reset();
@@ -275,7 +476,7 @@ const gameController = (() => {
         }
 
         if (player.status["makan"].amount === 1000 && makanBoost) {
-          player.status["main"].amount += 20;
+          player.status["main"].amount += changes.makan.boost;
           makanBoost = false;
         }
         if(player.status["makan"].amount === 800) {
@@ -285,10 +486,10 @@ const gameController = (() => {
       main: () => {
         toggleAlert("main")
         if (player.status["main"].amount < 200) {
-          player.status["belajar"].changeGrowth(20); 
+          player.status["belajar"].changeGrowth(changes.main.belajar20); 
         }
         else if (player.status["main"].amount < 100) {
-          player.status["belajar"].changeGrowth(10); 
+          player.status["belajar"].changeGrowth(changes.main.belajar10); 
         } else {
           player.status["belajar"].reset();
         }
@@ -301,8 +502,10 @@ const gameController = (() => {
     const callback = () => {
       player.update();
       updateClock();
+      DOM.greetingPlayer(clock.getHours());
 
       Algorithm.semesterUp();
+      console.log(Algorithm.getChanges());
       Algorithm.belajar();
       Algorithm.tidur();
       Algorithm.makan();
@@ -312,9 +515,9 @@ const gameController = (() => {
         DOM.updateProgress(
           val, Math.round(player.status[val].amount / 10)
         );
-        if (val != "belajar" && player.status[val].amount <= 0) {
-          gameOver();
-        }
+        if (val != "belajar" && player.status[val].amount <= 0) gameOver(player.status[val].name);
+        if((clock.getHours() === 0 && clock.getMinutes() === 0) 
+         || (clock.getHours() === 12 && clock.getMinutes() === 0) ) saveGame();
       });
     };
 
@@ -327,16 +530,21 @@ const gameController = (() => {
     return { start, stop }
   })();
 
-  const saveGame = () => {
-    let data = JSON.stringify(player);
-    localStorage.setItem("player", data);
+  const saveGame = (time) => {
+    let dataSave = JSON.stringify(player);
+    let clockSave = JSON.stringify(clock);
+    localStorage.setItem("player", dataSave);
+    localStorage.setItem("clock", clockSave);
   }
 
   const loadGame = () => {
     let data = JSON.parse(localStorage.getItem("player"));
+    let clockSave = new Date(JSON.parse(localStorage.getItem("clock")));
     if (data) {
+      console.log(clockSave);
+      clock = clockSave;
       player = Player(data.name, data.avatar, data.semester, data.status);
-      console.log(player);
+      // updateClock(clockSave.getHours, clockSave.getMinutes)
       DOM.changeName(player.name);
       DOM.changeAvatar(player.avatar);
       DOM.updateSemester(player.semester);
@@ -348,15 +556,13 @@ const gameController = (() => {
 
   // TODO
   // Bikin message custom per status
-  const gameOver = () => {
+  const gameOver = (status) => {
     gameClock.stop();
-    DOM.fadeOut(document.querySelector("#main-game"));
-    DOM.fadeIn(document.querySelector("#game-over"));
+    DOM.gameOver(status);
   }
 
   const init = (playerName, avatar) => {
     player = Player(playerName, avatar);
-    console.log([player, gameController.player])
     DOM.changeName(player.name);
     DOM.changeAvatar(player.avatar);
     DOM.updateSemester(player.semester);
@@ -398,6 +604,9 @@ const Debug = (() => {
           break;
       }
     },
+    turunin: (status) => {
+      gameController.getPlayer().status[status].amount = 100
+    },
     maxBelajar: () => {
       gameController.getPlayer().status["belajar"].amount = 950;
     },
@@ -411,14 +620,17 @@ const Debug = (() => {
       gameController.getPlayer().status["makan"].amount = 900;
       gameController.getPlayer().status["main"].amount = 900;
     },
+    gantiSemester: (val) => {
+      gameController.getPlayer().semester = val;
+      DOM.updateSemester(gameController.getPlayer().semester);
+    }
   }
 })();
 
-const gameStart = () => {
+const gameStart = (() => {
   if (gameController.loadGame()) {
     DOM.scene("main-game");
+    return;
   }
-  else {
-    DOM.scene("avatar-selection");
-  }
-}
+  DOM.scene("avatar-selection");
+})();

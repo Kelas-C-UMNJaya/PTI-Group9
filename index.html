@@ -15,7 +15,7 @@
 <body class="vh-100">
 
 <!-- AVATAR SELECTION SCENE -->
-<div class="fadeBase container position-relative h-100 d-flex flex-column flex-md-row align-items-center justify-content-center gap-3" id="avatar-selection">
+<div class="fadeBase fadeOut container position-relative h-100 d-flex flex-column flex-md-row align-items-center justify-content-center gap-3" id="avatar-selection">
 
       <div id="logo" class="mb-3 d-flex flex-column justify-content-center align-items-center w-50 gap-3">
         <img class="" src="assets/logo.svg" alt="logo">
@@ -82,15 +82,10 @@
 
 <!-- GAME OVER SCENE -->
   <div class="fadeBase fadeOut d-none position-absolute h-100 w-100 d-flex align-items-center justify-content-center"id="game-over">
-    <div class="container">
-      <div class="card">
-        <div class="card-body">
-          <h1 class="text-center">Game Over</h1>
-          <p class="text-center">
-            <a href="index.html" class="btn btn-primary">Play Again</a>
-          </p>
-        </div>
-      </div>
+    <div class="container d-flex flex-column align-items-center justify-content-center bg-light p-3 rounded-3">
+      <div id="gameover-logo"><img src="assets/game-over.svg" alt="" srcset=""></div>
+      <p id="gameover-message" class="fw-bold fs-4"></p>
+      <button id="gameover-resetbtn" class="btn btn-primary fw-bold link-light">Restart</button>
     </div>
   </div>
 
