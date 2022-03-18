@@ -66,6 +66,7 @@ const DOM = (() => {
       buttons.forEach(button => {
         button.addEventListener("click", (e) => {
           gameController.toggleActive(e.target.dataset.name);
+          DOM.changeAvatarOverlay(e.target.dataset.name);
           button.classList.remove("btn-light");
           button.classList.add("btn-warning");
           buttons.forEach(button => {
@@ -78,6 +79,7 @@ const DOM = (() => {
           if (!(button.classList.contains("active"))) {
             button.classList.remove("btn-warning");
             button.classList.add("btn-light");
+            DOM.changeAvatarOverlay("none");
           }
         });
       })
@@ -148,6 +150,21 @@ const DOM = (() => {
     changeAvatar: (url) => {
       let el = document.querySelector("#avatar");
       el.src = url;
+    },
+    changeAvatarOverlay: (status) => {
+      let el = document.querySelector("#avatar-overlay");
+      const makan = "./assets/avatar/status/act_makan.png";
+      const main = "./assets/avatar/status/act_main.png";
+      const belajar = "./assets/avatar/status/act_belajar.png";
+      const tidur = "./assets/avatar/status/act_tidur.png";
+      console.log(status);
+      switch (status) {
+        case "makan": el.src = makan; break;
+        case "main": el.src = main; break;
+        case "belajar": el.src = belajar; break;
+        case "tidur": el.src = tidur; break;
+        case "none": el.src = ""; break;
+      }
     },
     updateProgress: (status, val) => {
       const el = document.querySelector(`#${status}-progressBar`);
@@ -604,6 +621,7 @@ const gameController = (() => {
     DOM.fadeOut(document.querySelector("#avatar-selection"));
     DOM.fadeIn(document.querySelector("#main-game"));
     gameClock.start();
+    saveGame();
   }
 
   return {
