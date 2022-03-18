@@ -98,10 +98,18 @@ const DOM = (() => {
 
   const getUserInit = (() => {
     let submitBtn = document.querySelector("#avatar-button");
+    let textbox = document.querySelector("#name-input");
     submitBtn.addEventListener("click", () => {
-      let name = document.querySelector("#name-input").value;
+      let name = textbox.value;
       let image = document.querySelector(".carousel-item.active").querySelector("img").getAttribute("src");
       gameController.init(name, image);
+    })
+
+    textbox.addEventListener("keyup", (e) => {
+      if (e.key == "Enter") {
+        e.preventDefault();
+        submitBtn.click();
+      }
     })
   })();
   const pauseMenu = (() => {
@@ -228,14 +236,22 @@ const DOM = (() => {
     },
 
     fadeOut: (el) => {
+      const body = document.querySelector("body");
       el.classList.add("fadeOut");
+      body.classList.add("overflow-hidden");
       setTimeout(() => {
         el.classList.add("d-none")
+        body.classList.remove("overflow-hidden");
       }, 1000);
     },
     fadeIn: (el) => {
+      const body = document.querySelector("body");
       el.classList.remove("d-none")
-      setTimeout(() => el.classList.remove("fadeOut"), 1000);
+      body.classList.add("overflow-hidden");
+      setTimeout(() => {
+        el.classList.remove("fadeOut")
+        body.classList.remove("overflow-hidden");
+      }, 1000);
     },
     scene: (scene) => {
       const all = document.querySelectorAll(".fadeBase");
