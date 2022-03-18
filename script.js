@@ -26,23 +26,28 @@ class Status {
   }
 };
 
-const Player = (inName, inAvatar) => {
+const Player = (inName, inAvatar, inSemester, inStatus) => {
   let name = inName;
   let avatar = inAvatar;
-  // Bikin variabel untuk nyimpan url avatarnya
-  let belajar = new Status("belajar", 0, 10, 0); 
-  let makan = new Status("makan", 500, 100, 4); 
-  let main = new Status("main", 500, 60, 8); 
-  let tidur = new Status("tidur", 500, 20, 1); 
-  
-  let semester = 1;
+  let status = inStatus ? {
+    belajar: new Status(inStatus.belajar.name, inStatus.belajar.amount, inStatus.belajar.growth, inStatus.belajar.shrink),
+    makan: new Status(inStatus.makan.name, inStatus.makan.amount, inStatus.makan.growth, inStatus.makan.shrink),
+    main: new Status(inStatus.main.name, inStatus.main.amount, inStatus.main.growth, inStatus.main.shrink),
+    tidur: new Status(inStatus.tidur.name, inStatus.tidur.amount, inStatus.tidur.growth, inStatus.tidur.shrink),
+  }: {
+    belajar: new Status("belajar", 0, 10, 0),
+    makan: new Status("makan", 500, 100, 4),
+    main: new Status("main", 500, 60, 8),
+    tidur:  new Status("tidur", 500, 20, 1),
+  }
+    
+  let semester = inSemester ? inSemester : 1;
 
-  const status = { belajar, makan, main, tidur };
   const update = () => {
-    belajar.update();
-    makan.update();
-    main.update();
-    tidur.update();
+    status.belajar.update();
+    status.makan.update();
+    status.main.update();
+    status.tidur.update();
   }
 
   return {
@@ -152,7 +157,18 @@ const DOM = (() => {
     fadeIn: (el) => {
       el.classList.remove("d-none")
       setTimeout(() => el.classList.remove("fadeOut"), 1000);
-    }
+    },
+    scene: (scene) => {
+      const all = document.querySelectorAll(".fadeBase");
+      all.forEach(el => {
+        if (el.id === scene) {
+          DOM.fadeIn(el);
+        }
+        else {
+          DOM.fadeOut(el);
+        }
+      })
+    },
   }
 })();
 
@@ -160,6 +176,7 @@ const gameController = (() => {
   let clock = new Date();
   let player;
 
+  const getPlayer = () => { return player; }
   const initClock = () => {
     clock.setHours(9);
     clock.setMinutes(55);
@@ -310,6 +327,25 @@ const gameController = (() => {
     return { start, stop }
   })();
 
+  const saveGame = () => {
+    let data = JSON.stringify(player);
+    localStorage.setItem("player", data);
+  }
+
+  const loadGame = () => {
+    let data = JSON.parse(localStorage.getItem("player"));
+    if (data) {
+      player = Player(data.name, data.avatar, data.semester, data.status);
+      console.log(player);
+      DOM.changeName(player.name);
+      DOM.changeAvatar(player.avatar);
+      DOM.updateSemester(player.semester);
+      gameClock.start();
+      return true;
+    }
+    return false;
+  }
+
   // TODO
   // Bikin message custom per status
   const gameOver = () => {
@@ -320,6 +356,7 @@ const gameController = (() => {
 
   const init = (playerName, avatar) => {
     player = Player(playerName, avatar);
+    console.log([player, gameController.player])
     DOM.changeName(player.name);
     DOM.changeAvatar(player.avatar);
     DOM.updateSemester(player.semester);
@@ -332,9 +369,11 @@ const gameController = (() => {
   return {
     init,
     changeClock,
+    saveGame,
+    loadGame,
     gameOver,
     toggleActive,
-    player,
+    getPlayer,
   }
 })();
 
@@ -360,17 +399,26 @@ const Debug = (() => {
       }
     },
     maxBelajar: () => {
-      gameController.player.status["belajar"].amount = 950;
+      gameController.getPlayer().status["belajar"].amount = 950;
     },
     turuninSemua: () => {
-      gameController.player.status["tidur"].amount = 100;
-      gameController.player.status["makan"].amount = 100;
-      gameController.player.status["main"].amount = 100;
+      gameController.getPlayer().status["tidur"].amount = 100;
+      gameController.getPlayer().status["makan"].amount = 100;
+      gameController.getPlayer().status["main"].amount = 100;
     },
     naikinSemua: () => {
-      gameController.player.status["tidur"].amount = 900;
-      gameController.player.status["makan"].amount = 900;
-      gameController.player.status["main"].amount = 900;
+      gameController.getPlayer().status["tidur"].amount = 900;
+      gameController.getPlayer().status["makan"].amount = 900;
+      gameController.getPlayer().status["main"].amount = 900;
     },
   }
 })();
+
+const gameStart = () => {
+  if (gameController.loadGame()) {
+    DOM.scene("main-game");
+  }
+  else {
+    DOM.scene("avatar-selection");
+  }
+}
