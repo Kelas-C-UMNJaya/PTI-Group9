@@ -57,6 +57,10 @@ body {
   width: 150px;
 }
 
+#avatar-selection {
+  min-height: 100%;
+}
+
 #jam {
   text-align: right;
 }
