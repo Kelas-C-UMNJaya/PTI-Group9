@@ -1,12 +1,4 @@
-#avatar-slide{
-  margin: 30px;
-  height: 200px;
-  width: 200px;
-}
 
-.carousel-item img{
-  object-fit: cover;
-}
 
 #background{
   background-color: #5B7DB1;

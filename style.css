@@ -17,6 +17,20 @@ body {
   position: relative;
 }
 
+#avatar-gallery{
+  height: 300px;
+  width: 300px;
+}
+
+.carousel-item {
+  overflow: hidden;
+  width: 100%;
+}
+
+.carousel-item img{
+  object-fit: cover;
+}
+
 #bg-image{
   background-image: url("./assets/day.png");
   background-size: cover;

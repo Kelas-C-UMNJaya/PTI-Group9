@@ -26,9 +26,9 @@ class Status {
   }
 };
 
-const Player = (inName) => {
+const Player = (inName, inAvatar) => {
   let name = inName;
-  // TODO
+  let avatar = inAvatar;
   // Bikin variabel untuk nyimpan url avatarnya
   let belajar = new Status("belajar", 0, 10, 0); 
   let makan = new Status("makan", 500, 100, 4); 
@@ -47,6 +47,7 @@ const Player = (inName) => {
 
   return {
     name,
+    avatar,
     semester,
     status,
     update,
@@ -75,8 +76,20 @@ const DOM = (() => {
         });
       })
     })();
+  const getUserInit = (() => {
+    let submitBtn = document.querySelector("#avatar-button");
+    submitBtn.addEventListener("click", () => {
+      let name = document.querySelector("#name-input").value;
+      let image = document.querySelector(".carousel-item.active").querySelector("img").getAttribute("src");
+      gameController.init(name, image);
+    })
+  })()
   return {
     updateButton,
+    changeAvatar: (url) => {
+      let el = document.querySelector("#avatar");
+      el.src = url;
+    },
     updateProgress: (status, val) => {
       const el = document.querySelector(`#${status}-progressBar`);
       el.style.width = `${val}%`;
@@ -145,7 +158,7 @@ const DOM = (() => {
 
 const gameController = (() => {
   let clock = new Date();
-  let player = Player("Rivo");
+  let player;
 
   const initClock = () => {
     clock.setHours(9);
@@ -305,12 +318,16 @@ const gameController = (() => {
     DOM.fadeIn(document.querySelector("#game-over"));
   }
 
-  const init = (() => {
+  const init = (playerName, avatar) => {
+    player = Player(playerName, avatar);
     DOM.changeName(player.name);
+    DOM.changeAvatar(player.avatar);
     DOM.updateSemester(player.semester);
     initClock();
+    DOM.fadeOut(document.querySelector("#avatar-selection"));
+    DOM.fadeIn(document.querySelector("#main-game"));
     gameClock.start();
-  })();
+  }
 
   return {
     init,
