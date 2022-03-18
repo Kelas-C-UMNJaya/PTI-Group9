@@ -100,7 +100,7 @@ const DOM = (() => {
     let submitBtn = document.querySelector("#avatar-button");
     let textbox = document.querySelector("#name-input");
     submitBtn.addEventListener("click", () => {
-      let name = textbox.value;
+      let name = textbox.value ? textbox.value : "Agus";
       let image = document.querySelector(".carousel-item.active").querySelector("img").getAttribute("src");
       gameController.init(name, image);
     })
