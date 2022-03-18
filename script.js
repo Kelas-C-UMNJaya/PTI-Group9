@@ -133,14 +133,12 @@ const DOM = (() => {
     fadeOut: (el) => {
       el.classList.add("fadeOut");
       setTimeout(() => {
-        el.style.visibility = "hidden";
+        el.classList.add("d-none")
       }, 1000);
     },
     fadeIn: (el) => {
-      el.classList.remove("fadeOut");
-      setTimeout(() => {
-        el.style.visibility = "visible";
-      }, 1000);
+      el.classList.remove("d-none")
+      setTimeout(() => el.classList.remove("fadeOut"), 1000);
     }
   }
 })();
@@ -356,11 +354,6 @@ const Debug = (() => {
       gameController.player.status["tidur"].amount = 900;
       gameController.player.status["makan"].amount = 900;
       gameController.player.status["main"].amount = 900;
-    },
-    gameOver: () => {
-      DOM.fadeOut(document.querySelector("#main-game"));
-      DOM.fadeIn(document.querySelector("#game-over"));
-      
     },
   }
 })();
