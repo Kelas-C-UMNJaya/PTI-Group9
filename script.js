@@ -130,6 +130,14 @@ const DOM = (() => {
  
   return {
     updateButton,
+    resetButton: () => {
+      let buttons = document.querySelectorAll(".togglebutton");
+      buttons.forEach(el => {
+        el.classList.remove("btn-warning");
+        el.classList.remove("active");
+        el.classList.add("btn-light");
+      });
+    },
     greetingPlayer,
     gameOver: (status) => {
       DOM.scene("game-over");
@@ -618,8 +626,10 @@ const gameController = (() => {
     DOM.changeAvatar(player.avatar);
     DOM.updateSemester(player.semester);
     initClock();
+
     DOM.fadeOut(document.querySelector("#avatar-selection"));
     DOM.fadeIn(document.querySelector("#main-game"));
+    DOM.resetButton();
     gameClock.start();
     saveGame();
   }
