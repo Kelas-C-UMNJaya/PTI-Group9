@@ -13,6 +13,38 @@
 </head>
 
 <body class="vh-100">
+  <div id="help" class="m-4 text-white position-absolute top-0 end-0">
+    <a id="help-button" data-bs-toggle="modal" data-bs-target="#help-menu">
+        <i class="fa-solid fa-circle-question fa-2x"></i>
+    </a>
+  </div>
+  
+  <div id="menu-help" class="justify-content-center align-items-center d-flex">
+    <div class="modal fade" id="help-menu" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="gamehelp" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="gamehelp">Bantuan</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <ol>
+              <li>Untuk menyelesaikan game ini, pemain perlu menyelesaikan 8 semester pada AUL simulator.</li>
+              <li>Untuk memulai game pemain dapat memilih avatar yang diinginkan dan memasukkan nama. Kemudian tekan 'main sekarang'.</li>
+              <li>Terdapat 4 tombol dan 4 status bar yang akan manjadi bagian dalam game (main, belajar, makan, tidur).</li>
+              <li>Untuk mengaktifkan status hanya perlu menekan tombol sekali saja dan status akan bertambah.</li>
+              <li>Setiap status yang diaktifkan akan berpengaruh pada status lainnya misal (aktifkan belajar maka main dan makan akan berkurang).</li>
+              <li>Apabila pemain idle atau tidak melakukan aktifitas apapun maka seluruh status akan berkurang secara dinamis.</li>
+              <li>Apabila pemain ingin keluar dari permainan namun tidak ingin kehilangan prosesnya maka pemain dapat menekan tombol save.</li>
+              <li>Permainan akan melakukan auto save pada jam 12 siang dan jam 12 malam di dalam simulator.</li>
+              <li>Apabila pemain tidak mengaktifkan status belajar selama 6 jam di dalam simulator maka pemain akan di D.O (game over).</li>
+              <li>Jika salah satu dari 3 status bar (makan, main, tidur) habis/kosong maka permainan akan berakhir (game over).</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
 <!-- AVATAR SELECTION SCENE -->
 <div class="fadeBase fadeOut container position-relative d-flex flex-column flex-md-row align-items-center justify-content-center gap-3" id="avatar-selection">
