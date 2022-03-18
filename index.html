@@ -82,15 +82,10 @@
 
 <!-- GAME OVER SCENE -->
   <div class="fadeBase fadeOut d-none position-absolute h-100 w-100 d-flex align-items-center justify-content-center"id="game-over">
-    <div class="container">
-      <div class="card">
-        <div class="card-body">
-          <h1 class="text-center">Game Over</h1>
-          <p class="text-center">
-            <a href="index.html" class="btn btn-primary">Play Again</a>
-          </p>
-        </div>
-      </div>
+    <div class="container d-flex flex-column align-items-center justify-content-center bg-light p-3 rounded-3">
+      <div id="gameover-logo"><img src="assets/game-over.svg" alt="" srcset=""></div>
+      <p id="gameover-message" class="fw-bold fs-4"></p>
+      <button id="gameover-resetbtn" class="btn btn-primary fw-bold link-light">Restart</button>
     </div>
   </div>
 

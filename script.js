@@ -83,20 +83,16 @@ const DOM = (() => {
       })
     })();
 
-  const greetingPlayer = (() => {
-    setInterval(() => { 
-      let greeting = document.querySelector("#greeting-player");
-      let time = document.querySelector("#jam").innerHTML;
-      let hour = parseInt(time.split(":")[0]);
-      let greetingText = "";
-      if (hour >= 5 && hour <= 10) greetingText = "Selamat Pagi";
-      else if (hour >= 11 && hour <= 15) greetingText = "Selamat Siang";
-      else if (hour >= 16 && hour <= 18) greetingText = "Selamat Sore";
-      else if (hour >= 19 && hour <= 24) greetingText = "Selamat Malam";
-      else if (hour >= 0 && hour <= 4) greetingText = "Selamat Malam";
-      greeting.innerHTML = greetingText;
-    }, 1000);
-  })();
+  const greetingPlayer = (hour) => {
+    let greeting = document.querySelector("#greeting-player");
+    let greetingText = "";
+    if (hour >= 5 && hour <= 10) greetingText = "Selamat Pagi";
+    else if (hour >= 11 && hour <= 15) greetingText = "Selamat Siang";
+    else if (hour >= 16 && hour <= 18) greetingText = "Selamat Sore";
+    else if (hour >= 19 && hour <= 24) greetingText = "Selamat Malam";
+    else if (hour >= 0 && hour <= 4) greetingText = "Selamat Malam";
+    greeting.innerText = greetingText;
+  };
 
   const getUserInit = (() => {
     let submitBtn = document.querySelector("#avatar-button");
@@ -105,10 +101,21 @@ const DOM = (() => {
       let image = document.querySelector(".carousel-item.active").querySelector("img").getAttribute("src");
       gameController.init(name, image);
     })
-  })()
+  })();
   
   return {
     updateButton,
+    greetingPlayer,
+    gameOver: (status) => {
+      DOM.scene("game-over");
+      let gameOverMsg = document.querySelector("#gameover-message");
+      switch (status) {
+        case "makan": gameOverMsg.innerText = "Anda mati kelaparan!"; break;
+        case "main": gameOverMsg.innerText = "Anda stress kurang hiburan!"; break;
+        case "tidur": gameOverMsg.innerText = "Anda mati kurang tidur!"; break;
+        // case "belajar": gameOverMsg.innerText = "Anda mati kelaparan!"; break;
+      }
+    },
     changeAvatar: (url) => {
       let el = document.querySelector("#avatar");
       el.src = url;
@@ -495,6 +502,7 @@ const gameController = (() => {
     const callback = () => {
       player.update();
       updateClock();
+      DOM.greetingPlayer(clock.getHours());
 
       Algorithm.semesterUp();
       console.log(Algorithm.getChanges());
@@ -507,7 +515,7 @@ const gameController = (() => {
         DOM.updateProgress(
           val, Math.round(player.status[val].amount / 10)
         );
-        if (val != "belajar" && player.status[val].amount <= 0) gameOver();
+        if (val != "belajar" && player.status[val].amount <= 0) gameOver(player.status[val].name);
         if((clock.getHours() === 0 && clock.getMinutes() === 0) 
          || (clock.getHours() === 12 && clock.getMinutes() === 0) ) saveGame();
       });
@@ -548,9 +556,9 @@ const gameController = (() => {
 
   // TODO
   // Bikin message custom per status
-  const gameOver = () => {
+  const gameOver = (status) => {
     gameClock.stop();
-    DOM.scene("game-over");
+    DOM.gameOver(status);
   }
 
   const init = (playerName, avatar) => {
@@ -595,6 +603,9 @@ const Debug = (() => {
           console.log("Menunya tidak ada");
           break;
       }
+    },
+    turunin: (status) => {
+      gameController.getPlayer().status[status].amount = 100
     },
     maxBelajar: () => {
       gameController.getPlayer().status["belajar"].amount = 950;
