@@ -183,7 +183,7 @@ const DOM = (() => {
       const main = "./assets/avatar/status/act_main.png";
       const belajar = "./assets/avatar/status/act_belajar.png";
       const tidur = "./assets/avatar/status/act_tidur.png";
-      console.log(status);
+      // console.log(status);
       switch (status) {
         case "makan": el.src = makan; break;
         case "main": el.src = main; break;
@@ -345,7 +345,7 @@ const gameController = (() => {
     }
 
     const toggleAlertDO = () => {
-      console.log(countBeforeDO);
+      // console.log(countBeforeDO);
       if (countBeforeDO > 72) {
         gameController.gameOver("belajar");
       } else if (countBeforeDO >= 36 && alertDO === false) {
@@ -644,7 +644,7 @@ const gameController = (() => {
     let data = JSON.parse(localStorage.getItem("player"));
     let clockSave = new Date(JSON.parse(localStorage.getItem("clock")));
     if (data) {
-      console.log(clockSave);
+      // console.log(clockSave);
       clock = clockSave;
       player = Player(data.name, data.avatar, data.semester, data.status);
       // updateClock(clockSave.getHours, clockSave.getMinutes)
