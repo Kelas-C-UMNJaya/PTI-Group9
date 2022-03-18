@@ -82,6 +82,22 @@ const DOM = (() => {
         });
       })
     })();
+
+  const greetingPlayer = (() => {
+    setInterval(() => { 
+      let greeting = document.querySelector("#greeting-player");
+      let time = document.querySelector("#jam").innerHTML;
+      let hour = parseInt(time.split(":")[0]);
+      let greetingText = "";
+      if (hour >= 5 && hour <= 10) greetingText = "Selamat Pagi";
+      else if (hour >= 11 && hour <= 15) greetingText = "Selamat Siang";
+      else if (hour >= 16 && hour <= 18) greetingText = "Selamat Sore";
+      else if (hour >= 19 && hour <= 24) greetingText = "Selamat Malam";
+      else if (hour >= 0 && hour <= 4) greetingText = "Selamat Malam";
+      greeting.innerHTML = greetingText;
+    }, 1000);
+  })();
+
   const getUserInit = (() => {
     let submitBtn = document.querySelector("#avatar-button");
     submitBtn.addEventListener("click", () => {
@@ -90,6 +106,7 @@ const DOM = (() => {
       gameController.init(name, image);
     })
   })()
+  
   return {
     updateButton,
     changeAvatar: (url) => {
