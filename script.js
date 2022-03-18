@@ -109,12 +109,18 @@ const DOM = (() => {
     gameOver: (status) => {
       DOM.scene("game-over");
       let gameOverMsg = document.querySelector("#gameover-message");
+      let reset = document.querySelector("#gameover-resetbtn");
+
       switch (status) {
         case "makan": gameOverMsg.innerText = "Anda mati kelaparan!"; break;
         case "main": gameOverMsg.innerText = "Anda stress kurang hiburan!"; break;
         case "tidur": gameOverMsg.innerText = "Anda mati kurang tidur!"; break;
         // case "belajar": gameOverMsg.innerText = "Anda mati kelaparan!"; break;
       }
+      reset.addEventListener("click", ()=> {
+        gameController.reset();
+        DOM.scene("avatar-selection");
+      })
     },
     changeAvatar: (url) => {
       let el = document.querySelector("#avatar");
@@ -505,7 +511,6 @@ const gameController = (() => {
       DOM.greetingPlayer(clock.getHours());
 
       Algorithm.semesterUp();
-      console.log(Algorithm.getChanges());
       Algorithm.belajar();
       Algorithm.tidur();
       Algorithm.makan();
@@ -530,7 +535,7 @@ const gameController = (() => {
     return { start, stop }
   })();
 
-  const saveGame = (time) => {
+  const saveGame = () => {
     let dataSave = JSON.stringify(player);
     let clockSave = JSON.stringify(clock);
     localStorage.setItem("player", dataSave);
@@ -554,6 +559,12 @@ const gameController = (() => {
     return false;
   }
 
+  const reset = () => {
+    localStorage.removeItem("player");
+    localStorage.removeItem("clock");
+    player = {};
+  }
+
   // TODO
   // Bikin message custom per status
   const gameOver = (status) => {
@@ -574,6 +585,7 @@ const gameController = (() => {
 
   return {
     init,
+    reset,
     changeClock,
     saveGame,
     loadGame,
