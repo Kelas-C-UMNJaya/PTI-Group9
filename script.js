@@ -347,6 +347,7 @@ const gameController = (() => {
       },
       semesterUp: () => {
         if (player.semester > 8) {
+          gameController.gameClock.stop();
           DOM.winGame(player.avatar);
         }
         if (player.status.belajar.amount >= 1000) {
