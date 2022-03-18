@@ -15,4 +15,6 @@
 5. Setiap status yang diaktifkan akan berpengaruh pada status lainnya misal (aktifkan belajar maka main dan makan).
 6. Apabila pemain idle atau tidak melakukan aktifitas apapun maka seluruh status akan berkurang secara dinamis.
 7. Apabila pemain ingin keluar dari permainan namun tidak ingin kehilangan prosesnya maka pemain dapat menekan tombol save.
-8. Apabila pemain tidak mengaktifkan status belajar selama 6 jam didalam simulator maka akan di D.O (game over).
+8. Permainan akan melakukan auto save pada jam 12 siang dan jam 12 malam di dalam simulator.
+9. Apabila pemain tidak mengaktifkan status belajar selama 6 jam di dalam simulator maka akan di D.O (game over).
+10. Jika salah satu dari 3 status bar (makan, main, tidur) habis/kosong maka permainan akan berakhir (game over).  
