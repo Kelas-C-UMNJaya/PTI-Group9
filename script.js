@@ -98,10 +98,18 @@ const DOM = (() => {
 
   const getUserInit = (() => {
     let submitBtn = document.querySelector("#avatar-button");
+    let textbox = document.querySelector("#name-input");
     submitBtn.addEventListener("click", () => {
-      let name = document.querySelector("#name-input").value;
+      let name = textbox.value;
       let image = document.querySelector(".carousel-item.active").querySelector("img").getAttribute("src");
       gameController.init(name, image);
+    })
+
+    textbox.addEventListener("keyup", (e) => {
+      if (e.key == "Enter") {
+        e.preventDefault();
+        submitBtn.click();
+      }
     })
   })();
   const pauseMenu = (() => {
@@ -154,6 +162,16 @@ const DOM = (() => {
         gameController.reset();
         DOM.scene("avatar-selection");
       })
+    },
+    winGame: (avatar) => {
+      DOM.scene("win-game");
+      const img = document.querySelector("#win-img");
+      const resetBtn = document.querySelector("#win-reset");
+      img.src = avatar;
+      resetBtn.addEventListener("click", () => {
+        gameController.reset();
+        DOM.scene("avatar-selection");
+      });
     },
     changeAvatar: (url) => {
       let el = document.querySelector("#avatar");
@@ -228,14 +246,22 @@ const DOM = (() => {
     },
 
     fadeOut: (el) => {
+      const body = document.querySelector("body");
       el.classList.add("fadeOut");
+      body.classList.add("overflow-hidden");
       setTimeout(() => {
         el.classList.add("d-none")
+        body.classList.remove("overflow-hidden");
       }, 1000);
     },
     fadeIn: (el) => {
+      const body = document.querySelector("body");
       el.classList.remove("d-none")
-      setTimeout(() => el.classList.remove("fadeOut"), 1000);
+      body.classList.add("overflow-hidden");
+      setTimeout(() => {
+        el.classList.remove("fadeOut")
+        body.classList.remove("overflow-hidden");
+      }, 1000);
     },
     scene: (scene) => {
       const all = document.querySelectorAll(".fadeBase");
@@ -320,6 +346,10 @@ const gameController = (() => {
         return changes;
       },
       semesterUp: () => {
+        if (player.semester > 8) {
+          gameController.gameClock.stop();
+          DOM.winGame(player.avatar);
+        }
         if (player.status.belajar.amount >= 1000) {
           player.semester += 1;
           player.status["belajar"].amount = 0;
