@@ -163,6 +163,16 @@ const DOM = (() => {
         DOM.scene("avatar-selection");
       })
     },
+    winGame: (avatar) => {
+      DOM.scene("win-game");
+      const img = document.querySelector("#win-img");
+      const resetBtn = document.querySelector("#win-reset");
+      img.src = avatar;
+      resetBtn.addEventListener("click", () => {
+        gameController.reset();
+        DOM.scene("avatar-selection");
+      });
+    },
     changeAvatar: (url) => {
       let el = document.querySelector("#avatar");
       el.src = url;
@@ -336,6 +346,9 @@ const gameController = (() => {
         return changes;
       },
       semesterUp: () => {
+        if (player.semester > 8) {
+          DOM.winGame(player.avatar);
+        }
         if (player.status.belajar.amount >= 1000) {
           player.semester += 1;
           player.status["belajar"].amount = 0;
