@@ -223,6 +223,7 @@ const DOM = (() => {
     addAlert: (message, id) => {
       const el = document.querySelector("#game-alert");
       const alert = document.createElement("div");
+      if(document.querySelector(`#alert-${id}`)) return;
       alert.className = "alert alert-danger fade show in";
       alert.innerText = message;
       alert.id = `alert-${id}`;
@@ -323,7 +324,6 @@ const gameController = (() => {
 
   const Algorithm = (() => {
     let makanBoost = true;
-    let alert = false;
     let alertDO = false;
     let changes = {
       belajar: {makan: 0, main: 0},
@@ -332,16 +332,19 @@ const gameController = (() => {
       main: {belajar20: 0, belajar10: 0},
     };
     let countBeforeDO = 0;
+    let alert = false;
 
     const toggleAlert = (status) => {
       let val = player.status[status].amount;
-      if( val < 100 && alert === false) {
+      if( val < 100) {
         alert = true;
+      }
+      if (alert === true) {
         DOM.addAlert(`Kondisi anda memburuk!`, "status");
-      } else if ( val >= 100 && alert === true) {
-        alert = false;
+      } else {
         DOM.removeAlert("status");
       }
+      
     }
 
     const toggleAlertDO = () => {
@@ -361,7 +364,10 @@ const gameController = (() => {
       getChanges: () => {
         return changes;
       },
-      countBeforeDO,
+      resetDOCount: () => {
+        countBeforeDO = 0;
+      },
+      resetAlert: () => {alert = false},
       semesterUp: () => {
         if (player.semester > 8) {
           gameController.gameClock.stop();
@@ -609,6 +615,7 @@ const gameController = (() => {
       DOM.greetingPlayer(clock.getHours());
 
       Algorithm.semesterUp();
+      Algorithm.resetAlert();
       Algorithm.belajar();
       Algorithm.tidur();
       Algorithm.makan();
@@ -675,7 +682,7 @@ const gameController = (() => {
     DOM.changeName(player.name);
     DOM.changeAvatar(player.avatar);
     DOM.updateSemester(player.semester);
-    Algorithm.countBeforeDO = 0;
+    Algorithm.resetDOCount();
     initClock();
 
     DOM.fadeOut(document.querySelector("#avatar-selection"));
